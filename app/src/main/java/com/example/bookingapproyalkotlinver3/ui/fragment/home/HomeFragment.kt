@@ -89,102 +89,13 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
 
         binding.payDay.text = daysDiffPrivate.toString()
 
-        countRoom = MySharedPreferences.getInstance(requireActivity())
-            .getInt(AppConstant.SHAREDPREFERENCES_USER_COUNT_ROOM, 2)
-        countPerson = MySharedPreferences.getInstance(requireActivity())
-            .getInt(AppConstant.SHAREDPREFERENCES_USER_COUNT_PERSON, 2)
-        countChildren = MySharedPreferences.getInstance(requireActivity())
-            .getInt(AppConstant.SHAREDPREFERENCES_USER_COUNT_CHILDREN, 2)
-        ageChildren = MySharedPreferences.getInstance(requireActivity())
-            .getInt(AppConstant.SHAREDPREFERENCES_USER_AGE_CHILDREN, 1)
-        var textSearch = MySharedPreferences.getInstance(requireActivity())
-            .getString(AppConstant.SHAREDPREFERENCES_USER_TEXT_SEARCH, "Khách sạn gần nhất")
 
-        binding.countRoom.text = "$countRoom ${getString(R.string.Room)}"
-        binding.countChildren.text = "$countChildren ${getString(R.string.Children)}"
-        binding.countPerson.text = "$countPerson ${getString(R.string.Adult)}"
-        binding.textSearch.text = textSearch
     }
 
     override fun initOnClickListener() {
-        binding.contentPerson.setOnClickListener {
-            val bottomSheetPersonHome =
-                BottomSheetPersonHome(requireActivity(), object : BottomSheetPersonHome.Callback {
-                    override fun onCLickSum(person: Int, children: Int, room: Int, age: Int) {
-                        binding.countRoom.text = "$room ${getString(R.string.Room)}"
-                        binding.countChildren.text = "$children ${getString(R.string.Children)}"
-                        binding.countPerson.text = "$person ${getString(R.string.Adult)}"
 
-                        countPerson = person;
-                        countChildren = children;
-                        countRoom = room;
-                        ageChildren = age;
-                    }
-                })
-            bottomSheetPersonHome.show()
-            bottomSheetPersonHome.setCanceledOnTouchOutside(false)
-        }
 
-        binding.contentDate.setOnClickListener {
-            if (!materialDatePicker!!.isAdded) {
-                materialDatePicker!!.show(requireActivity().supportFragmentManager, "DATE_PICKER")
-            }
 
-            materialDatePicker!!.lifecycle.addObserver(object : DefaultLifecycleObserver {
-                override fun onCreate(owner: LifecycleOwner) {}
-
-                override fun onStart(owner: LifecycleOwner) {
-                    val root: View = materialDatePicker!!.requireView()
-                }
-
-                override fun onResume(owner: LifecycleOwner) {}
-
-                override fun onDestroy(owner: LifecycleOwner) {
-                    materialDatePicker!!.lifecycle.removeObserver(this)
-                }
-            })
-
-            materialDatePicker!!.addOnPositiveButtonClickListener { selection ->
-                val startDate: Long? = selection.first
-                val endDate: Long? = selection.second
-
-                SimpleDateFormat("EEE", Locale.getDefault()).format(startDate).apply {
-                    binding.tvTimeNhanPhong.text = this
-                }
-                SimpleDateFormat("EEE", Locale.getDefault()).format(endDate).apply {
-                    binding.dayEnd.text = this
-                }
-
-                SimpleDateFormat("dd", Locale.getDefault()).format(startDate).apply {
-                    binding.startDate.text = this
-                }
-                SimpleDateFormat("dd", Locale.getDefault()).format(endDate).apply {
-                    binding.endDate.text = this
-                }
-
-                SimpleDateFormat("MM", Locale.getDefault()).format(startDate).apply {
-                    binding.monthDate.text = "${getString(R.string.Month)} $this"
-                }
-                SimpleDateFormat("MM", Locale.getDefault()).format(endDate).apply {
-                    binding.monthEnd.text = "${getString(R.string.Month)} $this"
-                }
-
-                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(startDate).apply {
-                    checkStartDate = this
-                }
-                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(endDate).apply {
-                    checkEndDate = this
-                }
-
-                if (startDate != null && endDate != null) {
-                    val msDiff: Long = endDate - startDate
-                    val daysDiff: Long = TimeUnit.MILLISECONDS.toDays(msDiff)
-
-                    binding.payDay.text = daysDiff.toString()
-                    daysDiffPrivate = daysDiff.toInt()
-                }
-            }
-        }
 
 
         nearFromYouAdapter.setOnItemClickListener {
@@ -203,7 +114,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         }
 
         viewModel.locationYouSelfMutableLiveData.observe(viewLifecycleOwner) {
-            viewModel.getListNearByHotel(LocationNearByRequest(it.longitude, it.latitude, 10000))
+            viewModel.getListNearByHotel(LocationNearByRequest(105.8032958, 21.0023337, 10000))
         }
 
         viewModel.resourceMutableLiveDataHotelNearBy.observe(viewLifecycleOwner) {
@@ -397,6 +308,84 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
             RecyclerView.ViewHolder(binding.root) {
             fun bind() {
                 initDate()
+                initPerson()
+                binding.contentDate.setOnClickListener {
+                    if (!materialDatePicker!!.isAdded) {
+                        materialDatePicker!!.show(requireActivity().supportFragmentManager, "DATE_PICKER")
+                    }
+
+                    materialDatePicker!!.lifecycle.addObserver(object : DefaultLifecycleObserver {
+                        override fun onCreate(owner: LifecycleOwner) {}
+
+                        override fun onStart(owner: LifecycleOwner) {
+                            val root: View = materialDatePicker!!.requireView()
+                        }
+
+                        override fun onResume(owner: LifecycleOwner) {}
+
+                        override fun onDestroy(owner: LifecycleOwner) {
+                            materialDatePicker!!.lifecycle.removeObserver(this)
+                        }
+                    })
+
+                    materialDatePicker!!.addOnPositiveButtonClickListener { selection ->
+                        val startDate: Long? = selection.first
+                        val endDate: Long? = selection.second
+
+                        SimpleDateFormat("EEE", Locale.getDefault()).format(startDate).apply {
+                            binding.tvTimeNhanPhong.text = this
+                        }
+                        SimpleDateFormat("EEE", Locale.getDefault()).format(endDate).apply {
+                            binding.dayEnd.text = this
+                        }
+
+                        SimpleDateFormat("dd", Locale.getDefault()).format(startDate).apply {
+                            binding.startDate.text = this
+                        }
+                        SimpleDateFormat("dd", Locale.getDefault()).format(endDate).apply {
+                            binding.endDate.text = this
+                        }
+
+                        SimpleDateFormat("MM", Locale.getDefault()).format(startDate).apply {
+                            binding.monthDate.text = "${getString(R.string.Month)} $this"
+                        }
+                        SimpleDateFormat("MM", Locale.getDefault()).format(endDate).apply {
+                            binding.monthEnd.text = "${getString(R.string.Month)} $this"
+                        }
+
+                        SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(startDate).apply {
+                            checkStartDate = this
+                        }
+                        SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(endDate).apply {
+                            checkEndDate = this
+                        }
+
+                        if (startDate != null && endDate != null) {
+                            val msDiff: Long = endDate - startDate
+                            val daysDiff: Long = TimeUnit.MILLISECONDS.toDays(msDiff)
+
+                            binding.payDay.text = daysDiff.toString()
+                            daysDiffPrivate = daysDiff.toInt()
+                        }
+                    }
+                }
+                binding.contentPerson.setOnClickListener {
+                    val bottomSheetPersonHome =
+                        BottomSheetPersonHome(requireActivity(), object : BottomSheetPersonHome.Callback {
+                            override fun onCLickSum(person: Int, children: Int, room: Int, age: Int) {
+                                binding.countRoom.text = "$room ${getString(R.string.Room)}"
+                                binding.countChildren.text = "$children ${getString(R.string.Children)}"
+                                binding.countPerson.text = "$person ${getString(R.string.Adult)}"
+
+                                countPerson = person;
+                                countChildren = children;
+                                countRoom = room;
+                                ageChildren = age;
+                            }
+                        })
+                    bottomSheetPersonHome.show()
+                    bottomSheetPersonHome.setCanceledOnTouchOutside(false)
+                }
             }
 
             @SuppressLint("SetTextI18n")
@@ -426,6 +415,24 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                 SimpleDateFormat("MM", Locale.getDefault()).format(currentTimeTomorrow).apply {
                     binding.monthEnd.text = "${getString(R.string.Month)} $this"
                 }
+            }
+
+            private fun initPerson(){
+                countRoom = MySharedPreferences.getInstance(requireActivity())
+                    .getInt(AppConstant.SHAREDPREFERENCES_USER_COUNT_ROOM, 2)
+                countPerson = MySharedPreferences.getInstance(requireActivity())
+                    .getInt(AppConstant.SHAREDPREFERENCES_USER_COUNT_PERSON, 2)
+                countChildren = MySharedPreferences.getInstance(requireActivity())
+                    .getInt(AppConstant.SHAREDPREFERENCES_USER_COUNT_CHILDREN, 2)
+                ageChildren = MySharedPreferences.getInstance(requireActivity())
+                    .getInt(AppConstant.SHAREDPREFERENCES_USER_AGE_CHILDREN, 1)
+                var textSearch = MySharedPreferences.getInstance(requireActivity())
+                    .getString(AppConstant.SHAREDPREFERENCES_USER_TEXT_SEARCH, "Khách sạn gần nhất")
+
+                binding.countRoom.text = "$countRoom ${getString(R.string.Room)}"
+                binding.countChildren.text = "$countChildren ${getString(R.string.Children)}"
+                binding.countPerson.text = "$countPerson ${getString(R.string.Adult)}"
+                binding.textSearch.text = textSearch
             }
         }
 

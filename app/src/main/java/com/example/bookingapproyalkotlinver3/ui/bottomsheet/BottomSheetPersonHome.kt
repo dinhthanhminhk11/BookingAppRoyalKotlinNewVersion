@@ -46,7 +46,7 @@ class BottomSheetPersonHome constructor(context: Context, private val callback: 
             val age = binding.countAge.text.toString().trim().toInt()
             val countRoomCallback = binding.countRoom.text.toString().trim().toInt()
             callback.onCLickSum(countPerson, countPersonChildren, countRoomCallback, age)
-            dismiss()
+            cancel()
         }
 
         binding.downPersonChildren.alpha = 0.4f
@@ -215,17 +215,20 @@ class BottomSheetPersonHome constructor(context: Context, private val callback: 
             .getInt(AppConstant.SHAREDPREFERENCES_USER_COUNT_ROOM, 2).apply {
                 binding.countRoom.text = this.toString()
             }
-        countPersonText = MySharedPreferences.getInstance(context  ).getInt(AppConstant.SHAREDPREFERENCES_USER_COUNT_PERSON,
-            2).apply {
+        countPersonText = MySharedPreferences.getInstance(context).getInt(
+            AppConstant.SHAREDPREFERENCES_USER_COUNT_PERSON, 2
+        ).apply {
             binding.person.text = this.toString()
         }
 
-        countPersonChildrenText = MySharedPreferences.getInstance(context).getInt(  AppConstant.SHAREDPREFERENCES_USER_COUNT_CHILDREN,
-            2).apply {
+        countPersonChildrenText = MySharedPreferences.getInstance(context).getInt(
+            AppConstant.SHAREDPREFERENCES_USER_COUNT_CHILDREN, 2
+        ).apply {
             binding.personChildren.text = this.toString()
         }
-        ageText = MySharedPreferences.getInstance(context).getInt(AppConstant.SHAREDPREFERENCES_USER_AGE_CHILDREN,
-            1).apply {
+        ageText = MySharedPreferences.getInstance(context).getInt(
+            AppConstant.SHAREDPREFERENCES_USER_AGE_CHILDREN, 1
+        ).apply {
             binding.countAge.text = this.toString()
         }
         checkAge()

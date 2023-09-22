@@ -197,7 +197,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/_12dp"
             android:text="•"
-            android:textColor="@color/blue"
+            android:textColor="@color/black"
             android:textSize="@dimen/_20dp" />
 
         <TextView
@@ -215,7 +215,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/_12dp"
             android:text="•"
-            android:textColor="@color/blue"
+            android:textColor="@color/black"
             android:textSize="@dimen/_20dp" />
 
         <TextView
