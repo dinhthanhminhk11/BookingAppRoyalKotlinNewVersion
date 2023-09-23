@@ -5,6 +5,7 @@
     android:layout_height="@dimen/_272dp"
     android:layout_marginRight="@dimen/_24dp"
     android:background="@color/black"
+    app:cardElevation="@dimen/_0dp"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="@dimen/_20dp">
 

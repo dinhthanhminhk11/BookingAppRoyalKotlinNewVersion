@@ -28,6 +28,7 @@ import com.example.bookingapproyalkotlinver3.databinding.BottomViewHomeBinding
 import com.example.bookingapproyalkotlinver3.databinding.FragmentHomeBinding
 import com.example.bookingapproyalkotlinver3.databinding.TopViewHomeBinding
 import com.example.bookingapproyalkotlinver3.ui.adapter.NearFromYouAdapter
+import com.example.bookingapproyalkotlinver3.ui.adapter.loading.ShimmerNearByFromYouAdapter
 import com.example.bookingapproyalkotlinver3.ui.bottomsheet.BottomSheetPersonHome
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
 import com.google.android.material.datepicker.CalendarConstraints
@@ -53,11 +54,10 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
     private var countPerson = 2
     private var countChildren = 2
     private var ageChildren = 1
-    private var isLoading = false
     private lateinit var materialDatePicker: MaterialDatePicker<Pair<Long, Long>>
     private lateinit var nearFromYouAdapter: NearFromYouAdapter
     private lateinit var homeViewAdapter: HomeViewAdapter
-
+    private var isDataLoaded = true
     override fun initView() {
         if (checkLocationPermission()) {
             viewModel.getCurrentLocation(requireActivity())
@@ -87,16 +87,10 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                 )
             ).setCalendarConstraints(constraintBuilder.build()).build()
 
-        binding.payDay.text = daysDiffPrivate.toString()
-
 
     }
 
     override fun initOnClickListener() {
-
-
-
-
 
         nearFromYouAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
@@ -114,28 +108,27 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         }
 
         viewModel.locationYouSelfMutableLiveData.observe(viewLifecycleOwner) {
-            viewModel.getListNearByHotel(LocationNearByRequest(105.8032958, 21.0023337, 10000))
+            viewModel.getListNearByHotel(LocationNearByRequest(it.longitude, it.latitude, 10000))
         }
 
         viewModel.resourceMutableLiveDataHotelNearBy.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    hideProgressBar()
                     it.data?.let { it ->
-                        Log.i("MYTAG", "came here ${it.data.toList().size}")
+                        isDataLoaded = false
                         nearFromYouAdapter.differ.submitList(it.data.toList())
+                        homeViewAdapter.notifyDataSetChanged()
                     }
                 }
 
                 is Resource.Error -> {
-                    hideProgressBar()
                     it.message?.let {
-                        Log.i("MYTAG", "An error occurred : $it")
+                        isDataLoaded = false
                     }
                 }
 
                 is Resource.Loading -> {
-                    showProgressBar()
+                    isDataLoaded = true
                 }
 
             }
@@ -144,7 +137,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         viewModel.listAllHotelMutableLiveData.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    hideProgressBar()
                     it.data?.let {
                         Log.i("MYTAG", " datapros came here ${it.datapros.toList().size}")
 //                        nearFromYouAdapter.differ.submitList(it.data.toList())
@@ -152,14 +144,13 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                 }
 
                 is Resource.Error -> {
-                    hideProgressBar()
                     it.message?.let {
                         Log.i("MYTAG", "An error occurred : $it")
                     }
                 }
 
                 is Resource.Loading -> {
-                    showProgressBar()
+
                 }
 
                 else -> {}
@@ -183,17 +174,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         inflater: LayoutInflater, container: ViewGroup?
     ): FragmentHomeBinding = FragmentHomeBinding.inflate(inflater, container, false)
 
-
-    private fun showProgressBar() {
-        isLoading = true
-        binding.progressBar.visibility = View.VISIBLE
-    }
-
-    private fun hideProgressBar() {
-        isLoading = false
-        binding.progressBar.visibility = View.INVISIBLE
-    }
-
     private fun initRecyclerView() {
         nearFromYouAdapter = NearFromYouAdapter()
         homeViewAdapter = HomeViewAdapter()
@@ -202,10 +182,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         }
 
-        binding.recyclerviewNearFromYouHomeFragment.apply {
-            adapter = nearFromYouAdapter
-            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        }
+
     }
 
     private fun checkLocationPermission(): Boolean {
@@ -247,12 +224,9 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return when (viewType) {
                 TOP_TYPE -> {
-                    val view =
-                        TopViewHomeBinding.inflate(
-                            LayoutInflater.from(parent.context),
-                            parent,
-                            false
-                        )
+                    val view = TopViewHomeBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
                     TopViewHolder(view)
                 }
 
@@ -311,7 +285,9 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                 initPerson()
                 binding.contentDate.setOnClickListener {
                     if (!materialDatePicker!!.isAdded) {
-                        materialDatePicker!!.show(requireActivity().supportFragmentManager, "DATE_PICKER")
+                        materialDatePicker!!.show(
+                            requireActivity().supportFragmentManager, "DATE_PICKER"
+                        )
                     }
 
                     materialDatePicker!!.lifecycle.addObserver(object : DefaultLifecycleObserver {
@@ -353,9 +329,10 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                             binding.monthEnd.text = "${getString(R.string.Month)} $this"
                         }
 
-                        SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(startDate).apply {
-                            checkStartDate = this
-                        }
+                        SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(startDate)
+                            .apply {
+                                checkStartDate = this
+                            }
                         SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(endDate).apply {
                             checkEndDate = this
                         }
@@ -370,11 +347,14 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                     }
                 }
                 binding.contentPerson.setOnClickListener {
-                    val bottomSheetPersonHome =
-                        BottomSheetPersonHome(requireActivity(), object : BottomSheetPersonHome.Callback {
-                            override fun onCLickSum(person: Int, children: Int, room: Int, age: Int) {
+                    val bottomSheetPersonHome = BottomSheetPersonHome(requireActivity(),
+                        object : BottomSheetPersonHome.Callback {
+                            override fun onCLickSum(
+                                person: Int, children: Int, room: Int, age: Int
+                            ) {
                                 binding.countRoom.text = "$room ${getString(R.string.Room)}"
-                                binding.countChildren.text = "$children ${getString(R.string.Children)}"
+                                binding.countChildren.text =
+                                    "$children ${getString(R.string.Children)}"
                                 binding.countPerson.text = "$person ${getString(R.string.Adult)}"
 
                                 countPerson = person;
@@ -390,34 +370,49 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
 
             @SuppressLint("SetTextI18n")
             private fun initDate() {
+                binding.payDay.text = daysDiffPrivate.toString()
+
                 var calendar = Calendar.getInstance()
                 calendar.add(Calendar.DAY_OF_YEAR, 1)
                 currentTimeNow = Calendar.getInstance().time
                 currentTimeTomorrow = calendar.time
 
-                SimpleDateFormat("EEE", Locale.getDefault()).format(currentTimeNow).apply {
-                    binding.tvTimeNhanPhong.text = this
+                currentTimeNow?.let {
+                    SimpleDateFormat("EEE", Locale.getDefault()).format(it).apply {
+                        binding.tvTimeNhanPhong.text = this
+                    }
                 }
-                SimpleDateFormat("EEE", Locale.getDefault()).format(currentTimeTomorrow).apply {
-                    binding.dayEnd.text = this
-                }
-
-                SimpleDateFormat("dd", Locale.getDefault()).format(currentTimeNow).apply {
-                    binding.startDate.text = this
-                }
-                SimpleDateFormat("dd", Locale.getDefault()).format(currentTimeTomorrow).apply {
-                    binding.endDate.text = this
+                currentTimeTomorrow?.let {
+                    SimpleDateFormat("EEE", Locale.getDefault()).format(it).apply {
+                        binding.dayEnd.text = this
+                    }
                 }
 
-                SimpleDateFormat("MM", Locale.getDefault()).format(currentTimeNow).apply {
-                    binding.monthDate.text = "${getString(R.string.Month)} $this"
+                currentTimeNow?.let {
+                    SimpleDateFormat("dd", Locale.getDefault()).format(it).apply {
+                        binding.startDate.text = this
+                    }
                 }
-                SimpleDateFormat("MM", Locale.getDefault()).format(currentTimeTomorrow).apply {
-                    binding.monthEnd.text = "${getString(R.string.Month)} $this"
+                currentTimeTomorrow?.let {
+                    SimpleDateFormat("dd", Locale.getDefault()).format(it).apply {
+                        binding.endDate.text = this
+                    }
+                }
+
+                currentTimeNow?.let {
+                    SimpleDateFormat("MM", Locale.getDefault()).format(it).apply {
+                        binding.monthDate.text = "${getString(R.string.Month)} $this"
+                    }
+                }
+                currentTimeTomorrow?.let {
+                    SimpleDateFormat("MM", Locale.getDefault()).format(it).apply {
+                        binding.monthEnd.text = "${getString(R.string.Month)} $this"
+                    }
                 }
             }
 
-            private fun initPerson(){
+            @SuppressLint("SetTextI18n")
+            private fun initPerson() {
                 countRoom = MySharedPreferences.getInstance(requireActivity())
                     .getInt(AppConstant.SHAREDPREFERENCES_USER_COUNT_ROOM, 2)
                 countPerson = MySharedPreferences.getInstance(requireActivity())
@@ -438,8 +433,17 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
 
         inner class BetweenViewHolder(val binding: BetweenViewHomeBinding) :
             RecyclerView.ViewHolder(binding.root) {
+            @SuppressLint("NotifyDataSetChanged")
             fun bind() {
-
+                binding.recyclerviewNearFromYouHomeFragment.apply {
+                    layoutManager =
+                        LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+                    adapter = if (isDataLoaded) {
+                        ShimmerNearByFromYouAdapter(2)
+                    } else {
+                        nearFromYouAdapter
+                    }
+                }
             }
         }
 
