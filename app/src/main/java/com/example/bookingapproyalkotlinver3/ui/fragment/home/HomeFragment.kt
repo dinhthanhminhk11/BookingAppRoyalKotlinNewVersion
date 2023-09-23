@@ -58,6 +58,11 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
     private lateinit var nearFromYouAdapter: NearFromYouAdapter
     private lateinit var homeViewAdapter: HomeViewAdapter
     private var isDataLoaded = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
     override fun initView() {
         if (checkLocationPermission()) {
             viewModel.getCurrentLocation(requireActivity())
@@ -102,6 +107,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun observeLiveData() {
         viewModel.ctyData.observe(viewLifecycleOwner) {
             binding.nameAddress.text = it.toString()
@@ -443,7 +449,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                     } else {
                         nearFromYouAdapter
                     }
-                }
+                }.scrollToPosition(3)
             }
         }
 

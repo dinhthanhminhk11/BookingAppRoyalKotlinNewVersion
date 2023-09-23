@@ -8,6 +8,7 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
+import com.example.bookingapproyalkotlinver3.ui.customview.mutilfragment.Slidr
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseViewModelFragment<Binding : ViewBinding> : BaseFragment<Binding>() {
@@ -51,5 +52,9 @@ abstract class BaseViewModelFragment<Binding : ViewBinding> : BaseFragment<Bindi
 
     fun showSnackbar(view: View, message: String) {
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    fun onBackCustom(){
+        Slidr.attach(requireActivity())
     }
 }
