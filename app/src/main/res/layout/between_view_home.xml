@@ -35,7 +35,7 @@
             android:layout_centerVertical="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:text="@string/SeeMore_homeFragment"
-            android:textColor="@color/blue"
+            android:textColor="@color/black"
             android:textSize="@dimen/_12dp" />
 
     </RelativeLayout>

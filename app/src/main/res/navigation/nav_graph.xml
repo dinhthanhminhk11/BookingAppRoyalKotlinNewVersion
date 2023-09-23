@@ -17,10 +17,42 @@
             app:exitAnim="@anim/fragment_slide_left_exit"
             app:popEnterAnim="@anim/fragment_slide_right_enter"
             app:popExitAnim="@anim/fragment_slide_right_exit" />
+        <action
+            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:exitAnim="@anim/fragment_slide_left_exit"
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit"
+            android:id="@+id/action_kingMainFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:exitAnim="@anim/fragment_slide_left_exit"
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit"
+            android:id="@+id/action_kingMainFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailHotelFragment"
         android:name="com.example.bookingapproyalkotlinver3.ui.fragment.DetailHotelFragment"
         android:label="fragment_detail_hotel_activity"
         tools:layout="@layout/fragment_detail_hotel_activity" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.bookingapproyalkotlinver3.ui.fragment.user.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:exitAnim="@anim/fragment_slide_left_exit"
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit"
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.bookingapproyalkotlinver3.ui.fragment.user.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
 </navigation>

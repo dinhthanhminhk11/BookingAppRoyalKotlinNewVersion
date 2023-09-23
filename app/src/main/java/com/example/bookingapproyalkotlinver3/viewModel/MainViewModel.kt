@@ -40,7 +40,6 @@ class MainViewModel @Inject constructor(
         MutableLiveData()
     val addressData: MutableLiveData<String> = MutableLiveData()
     val ctyData: MutableLiveData<String> = MutableLiveData()
-    val locationYouSelfMutableLiveData: MutableLiveData<Location> = MutableLiveData()
     val listAllHotelMutableLiveData: MutableLiveData<Resource<HotelResponse>> = MutableLiveData()
 
     fun getListNearByHotel(locationNearByRequest: LocationNearByRequest) =
@@ -49,6 +48,7 @@ class MainViewModel @Inject constructor(
                 if (isNetworkAvailable(app)) {
                     val apiResult = repository.getListHotelNearBy(locationNearByRequest)
                     resourceMutableLiveDataHotelNearBy.postValue(apiResult)
+                    Log.e("MInh" , "getListNearByHotel")
                 } else {
                     resourceMutableLiveDataHotelNearBy.postValue(Resource.Error("Internet is not available"))
                 }
@@ -132,7 +132,7 @@ class MainViewModel @Inject constructor(
                     val locationYouSelf = Location("locationYourSelf")
                     locationYouSelf.longitude = longi
                     locationYouSelf.latitude = lati
-                    locationYouSelfMutableLiveData.postValue(locationYouSelf)
+                    getListNearByHotel(LocationNearByRequest(locationYouSelf.longitude, locationYouSelf.latitude, 10000))
                     getAddress(context, locationYouSelf.latitude, locationYouSelf.longitude)
                 }
             }

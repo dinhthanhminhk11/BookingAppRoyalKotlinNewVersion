@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,13 +20,14 @@ import com.example.bookingapproyalkotlinver3.R
 import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.constant.MySharedPreferences
-import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
 import com.example.bookingapproyalkotlinver3.data.util.Resource
 import com.example.bookingapproyalkotlinver3.databinding.BetweenViewHomeBinding
 import com.example.bookingapproyalkotlinver3.databinding.BottomViewHomeBinding
 import com.example.bookingapproyalkotlinver3.databinding.FragmentHomeBinding
 import com.example.bookingapproyalkotlinver3.databinding.TopViewHomeBinding
+import com.example.bookingapproyalkotlinver3.ui.adapter.BestForYouAdapter
 import com.example.bookingapproyalkotlinver3.ui.adapter.NearFromYouAdapter
+import com.example.bookingapproyalkotlinver3.ui.adapter.loading.ShimmerBestForYouAdapter
 import com.example.bookingapproyalkotlinver3.ui.adapter.loading.ShimmerNearByFromYouAdapter
 import com.example.bookingapproyalkotlinver3.ui.bottomsheet.BottomSheetPersonHome
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
@@ -57,20 +57,12 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
     private lateinit var materialDatePicker: MaterialDatePicker<Pair<Long, Long>>
     private lateinit var nearFromYouAdapter: NearFromYouAdapter
     private lateinit var homeViewAdapter: HomeViewAdapter
+    private lateinit var bestForYouAdapter: BestForYouAdapter
     private var isDataLoaded = true
+    private var isDataLoadedBestForYou = true
+    private var positionListNearFrom = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
     override fun initView() {
-        if (checkLocationPermission()) {
-            viewModel.getCurrentLocation(requireActivity())
-        } else {
-            requestLocationPermission()
-        }
-
-
         initRecyclerView()
 
         val builder: MaterialDatePicker.Builder<Pair<Long, Long>> =
@@ -97,9 +89,20 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
 
     override fun initOnClickListener() {
 
-        nearFromYouAdapter.setOnItemClickListener {
+        nearFromYouAdapter.setOnItemClickListener { hotel, position ->
             val bundle = Bundle().apply {
-                putSerializable(AppConstant.HOTEL_EXTRA, it)
+                putSerializable(AppConstant.HOTEL_EXTRA, hotel)
+            }
+            findNavController().navigate(
+                R.id.action_kingMainFragment_to_detailHotelFragment, bundle
+            )
+
+            positionListNearFrom = position
+        }
+
+        bestForYouAdapter.setOnItemClickListener { hotel, _ ->
+            val bundle = Bundle().apply {
+                putSerializable(AppConstant.HOTEL_EXTRA, hotel)
             }
             findNavController().navigate(
                 R.id.action_kingMainFragment_to_detailHotelFragment, bundle
@@ -111,10 +114,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
     override fun observeLiveData() {
         viewModel.ctyData.observe(viewLifecycleOwner) {
             binding.nameAddress.text = it.toString()
-        }
-
-        viewModel.locationYouSelfMutableLiveData.observe(viewLifecycleOwner) {
-            viewModel.getListNearByHotel(LocationNearByRequest(it.longitude, it.latitude, 10000))
         }
 
         viewModel.resourceMutableLiveDataHotelNearBy.observe(viewLifecycleOwner) {
@@ -144,19 +143,20 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
             when (it) {
                 is Resource.Success -> {
                     it.data?.let {
-                        Log.i("MYTAG", " datapros came here ${it.datapros.toList().size}")
-//                        nearFromYouAdapter.differ.submitList(it.data.toList())
+                        isDataLoadedBestForYou = false
+                        bestForYouAdapter.differ.submitList(it.datapros.toList())
+                        homeViewAdapter.notifyDataSetChanged()
                     }
                 }
 
                 is Resource.Error -> {
                     it.message?.let {
-                        Log.i("MYTAG", "An error occurred : $it")
+                        isDataLoadedBestForYou = false
                     }
                 }
 
                 is Resource.Loading -> {
-
+                    isDataLoadedBestForYou = true
                 }
 
                 else -> {}
@@ -166,8 +166,13 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
     }
 
     override fun initData() {
-        viewModel.getAllListHotel()
+        if (checkLocationPermission()) {
+            viewModel.getCurrentLocation(requireActivity())
+        } else {
+            requestLocationPermission()
+        }
 
+        viewModel.getAllListHotel()
     }
 
     override fun onRequestPermissionsResult(
@@ -183,12 +188,11 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
     private fun initRecyclerView() {
         nearFromYouAdapter = NearFromYouAdapter()
         homeViewAdapter = HomeViewAdapter()
+        bestForYouAdapter = BestForYouAdapter()
         binding.listViewHome.apply {
             adapter = homeViewAdapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         }
-
-
     }
 
     private fun checkLocationPermission(): Boolean {
@@ -449,17 +453,23 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                     } else {
                         nearFromYouAdapter
                     }
-                }.scrollToPosition(3)
+                }.scrollToPosition(positionListNearFrom)
             }
         }
 
         inner class BottomViewHolder(val binding: BottomViewHomeBinding) :
             RecyclerView.ViewHolder(binding.root) {
             fun bind() {
-
+                binding.recyclerviewBestForYouHomeFragment.apply {
+                    layoutManager =
+                        LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                    adapter = if (isDataLoadedBestForYou) {
+                        ShimmerBestForYouAdapter(6)
+                    } else {
+                        bestForYouAdapter
+                    }
+                }
             }
         }
-
-
     }
 }

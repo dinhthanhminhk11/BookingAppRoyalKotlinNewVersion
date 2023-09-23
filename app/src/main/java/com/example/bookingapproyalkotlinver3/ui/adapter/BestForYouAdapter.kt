@@ -10,12 +10,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.bookingapproyalkotlinver3.R
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Hotel
-import com.example.bookingapproyalkotlinver3.databinding.ItemNearfromyouHomefragmentBinding
-import java.text.DecimalFormat
+import com.example.bookingapproyalkotlinver3.databinding.ItemBestforyouHomefragmentBinding
 
-class NearFromYouAdapter : RecyclerView.Adapter<NearFromYouAdapter.ViewHolder>() {
-    val df = DecimalFormat("0.0")
-
+class BestForYouAdapter : RecyclerView.Adapter<BestForYouAdapter.ViewHolder>() {
     private val callback = object : DiffUtil.ItemCallback<Hotel>() {
         override fun areItemsTheSame(oldItem: Hotel, newItem: Hotel): Boolean {
             return oldItem._id == newItem._id
@@ -28,24 +25,18 @@ class NearFromYouAdapter : RecyclerView.Adapter<NearFromYouAdapter.ViewHolder>()
 
     val differ = AsyncListDiffer(this, callback)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemNearfromyouHomefragmentBinding.inflate(
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BestForYouAdapter.ViewHolder {
+        val binding = ItemBestforyouHomefragmentBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        val size = differ.currentList.size
-        return if (size > 6) 6 else size
-    }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val hotel: Hotel = differ.currentList[position]
-        holder.bind(hotel, position)
-    }
-
-    inner class ViewHolder(val binding: ItemNearfromyouHomefragmentBinding) :
+    inner class ViewHolder(val binding: ItemBestforyouHomefragmentBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(item: Hotel, position: Int) {
@@ -53,13 +44,19 @@ class NearFromYouAdapter : RecyclerView.Adapter<NearFromYouAdapter.ViewHolder>()
                 RequestOptions().centerCrop().placeholder(R.drawable.imageloading)
                     .error(R.drawable.imageerror)
 
-            Glide.with(binding.imgItemNearFromYou.context).load(item.images[0]).apply(options)
-                .into(binding.imgItemNearFromYou)
+            Glide.with(binding.imgItemBestForYou.context).load(item.images[0]).apply(options)
+                .into(binding.imgItemBestForYou)
+            binding.tvNameHouseItemBestforyou.text= item.name
+            binding.tvPriceHouseItemBestforyou.text = item.giaDaoDong
 
-            binding.tvAddressItemNearFromYou.text =
-                "${item.sonha}, ${item.xa}, ${item.huyen}, ${item.tinh}"
-            binding.tvDistanceItemNearFromYou.text = "${df.format(item.calculated / 1000)} Km"
-            binding.tvNameItemNearFromYou.text = item.name
+            Glide.with(binding.imgItemBestForYou.context).load(item.convenient[0].iconImage).apply(options)
+                .into(binding.icon1)
+
+            Glide.with(binding.imgItemBestForYou.context).load(item.convenient[1].iconImage).apply(options)
+                .into(binding.icon2)
+
+            binding.nameIcon1.text = item.convenient[0].name
+            binding.tvNameIcon1.text = item.convenient[1].name
 
             binding.root.setOnClickListener {
                 onItemClickListener?.let {
@@ -69,9 +66,17 @@ class NearFromYouAdapter : RecyclerView.Adapter<NearFromYouAdapter.ViewHolder>()
         }
     }
 
+    override fun getItemCount(): Int = differ.currentList.size
+
+    override fun onBindViewHolder(holder: BestForYouAdapter.ViewHolder, position: Int) {
+        val hotel: Hotel = differ.currentList[position]
+        holder.bind(hotel, position)
+    }
+
     private var onItemClickListener: ((Hotel, Int) -> Unit)? = null
 
     fun setOnItemClickListener(listener: (Hotel, Int) -> Unit) {
         onItemClickListener = listener
     }
+
 }

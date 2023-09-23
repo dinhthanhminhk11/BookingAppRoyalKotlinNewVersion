@@ -13,13 +13,16 @@ import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseViewModelFragment<Binding : ViewBinding> : BaseFragment<Binding>() {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initData()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        setupContentWindow()
         initView()
         initOnClickListener()
         observeLiveData()
-        initData()
     }
 
     abstract fun initView()

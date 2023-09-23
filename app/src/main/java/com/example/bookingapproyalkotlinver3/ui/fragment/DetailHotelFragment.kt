@@ -12,7 +12,6 @@ import com.example.bookingapproyalkotlinver3.databinding.FragmentDetailHotelActi
 
 class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBinding>() {
     override fun initView() {
-        onBackCustom()
     }
 
     override fun initOnClickListener() {
