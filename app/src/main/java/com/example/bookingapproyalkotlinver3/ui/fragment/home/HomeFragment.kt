@@ -20,6 +20,7 @@ import com.example.bookingapproyalkotlinver3.R
 import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.constant.MySharedPreferences
+import com.example.bookingapproyalkotlinver3.constant.setUnderlinedText
 import com.example.bookingapproyalkotlinver3.data.util.Resource
 import com.example.bookingapproyalkotlinver3.databinding.BetweenViewHomeBinding
 import com.example.bookingapproyalkotlinver3.databinding.BottomViewHomeBinding
@@ -83,8 +84,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                     MaterialDatePicker.todayInUtcMilliseconds()
                 )
             ).setCalendarConstraints(constraintBuilder.build()).build()
-
-
     }
 
     override fun initOnClickListener() {
@@ -135,7 +134,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                 is Resource.Loading -> {
                     isDataLoaded = true
                 }
-
             }
         }
 
@@ -445,6 +443,8 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
             RecyclerView.ViewHolder(binding.root) {
             @SuppressLint("NotifyDataSetChanged")
             fun bind() {
+                binding.seeMoreNearFromYouHomeFragment.setUnderlinedText(binding.seeMoreNearFromYouHomeFragment.text.toString())
+
                 binding.recyclerviewNearFromYouHomeFragment.apply {
                     layoutManager =
                         LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -460,6 +460,8 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         inner class BottomViewHolder(val binding: BottomViewHomeBinding) :
             RecyclerView.ViewHolder(binding.root) {
             fun bind() {
+                binding.seeMoreBestForYouHomeFragment.setUnderlinedText(binding.seeMoreBestForYouHomeFragment.text.toString())
+
                 binding.recyclerviewBestForYouHomeFragment.apply {
                     layoutManager =
                         LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)

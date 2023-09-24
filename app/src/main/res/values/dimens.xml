@@ -4,7 +4,7 @@
 
 <!--Size alert dialog-->
     <dimen name="corner_alert_dialog">15dp</dimen>
-
+    <dimen name="default_padding">16dp</dimen>
 <!--Text size-->
     <dimen name="title_main_size">20sp</dimen>
     <dimen name="header1_size">18sp</dimen>

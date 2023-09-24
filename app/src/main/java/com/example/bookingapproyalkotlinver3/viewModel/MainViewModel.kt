@@ -19,6 +19,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
+import com.example.bookingapproyalkotlinver3.data.model.user.LoginResponse
+import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
 import com.example.bookingapproyalkotlinver3.data.repository.Repository
 import com.example.bookingapproyalkotlinver3.data.util.Resource
 import com.google.android.gms.location.LocationCallback
@@ -33,22 +35,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val app: Application,
-    private val repository: Repository
+    private val app: Application, private val repository: Repository
 ) : ViewModel() {
     val resourceMutableLiveDataHotelNearBy: MutableLiveData<Resource<HotelResponseNearBy>> =
         MutableLiveData()
     val addressData: MutableLiveData<String> = MutableLiveData()
     val ctyData: MutableLiveData<String> = MutableLiveData()
     val listAllHotelMutableLiveData: MutableLiveData<Resource<HotelResponse>> = MutableLiveData()
-
+    val loginResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
     fun getListNearByHotel(locationNearByRequest: LocationNearByRequest) =
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (isNetworkAvailable(app)) {
                     val apiResult = repository.getListHotelNearBy(locationNearByRequest)
                     resourceMutableLiveDataHotelNearBy.postValue(apiResult)
-                    Log.e("MInh" , "getListNearByHotel")
+                    Log.e("MInh", "getListNearByHotel")
                 } else {
                     resourceMutableLiveDataHotelNearBy.postValue(Resource.Error("Internet is not available"))
                 }
@@ -57,6 +58,32 @@ class MainViewModel @Inject constructor(
                 resourceMutableLiveDataHotelNearBy.postValue(Resource.Error(e.message.toString()))
             }
         }
+
+    fun login(userLogin: UserLogin) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            if (isNetworkAvailable(app)) {
+                val apiResult = repository.getUser(userLogin)
+                loginResponse.postValue(apiResult)
+            } else {
+                loginResponse.postValue(Resource.Error("Internet is not available"))
+            }
+        } catch (e: Exception) {
+            loginResponse.postValue(Resource.Error(e.message.toString()))
+        }
+    }
+
+    fun getUserByToken(token: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            if (isNetworkAvailable(app)) {
+                val apiResult = repository.getUserByToken(token)
+                loginResponse.postValue(apiResult)
+            } else {
+                loginResponse.postValue(Resource.Error("Internet is not available"))
+            }
+        } catch (e: Exception) {
+            loginResponse.postValue(Resource.Error(e.message.toString()))
+        }
+    }
 
     fun getAllListHotel() = viewModelScope.launch(Dispatchers.IO) {
         try {
@@ -132,7 +159,11 @@ class MainViewModel @Inject constructor(
                     val locationYouSelf = Location("locationYourSelf")
                     locationYouSelf.longitude = longi
                     locationYouSelf.latitude = lati
-                    getListNearByHotel(LocationNearByRequest(locationYouSelf.longitude, locationYouSelf.latitude, 10000))
+                    getListNearByHotel(
+                        LocationNearByRequest(
+                            locationYouSelf.longitude, locationYouSelf.latitude, 10000
+                        )
+                    )
                     getAddress(context, locationYouSelf.latitude, locationYouSelf.longitude)
                 }
             }

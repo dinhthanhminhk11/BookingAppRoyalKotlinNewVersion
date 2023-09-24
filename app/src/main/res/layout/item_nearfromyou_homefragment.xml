@@ -27,6 +27,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/_20dp"
+            android:layout_marginRight="@dimen/_10dp"
             android:layout_marginBottom="@dimen/_16dp"
             android:orientation="vertical">
 
@@ -34,7 +35,6 @@
                 android:id="@+id/tvNameItemNearFromYou"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/DreamsvilleHouse_itemNearFromYou"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_16dp"
                 android:textStyle="bold" />
@@ -45,7 +45,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8dp"
                 android:layout_marginBottom="@dimen/_16dp"
-                android:text="@string/JlSultanIskandarMuda_itemNearFromYou"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12dp" />
         </LinearLayout>

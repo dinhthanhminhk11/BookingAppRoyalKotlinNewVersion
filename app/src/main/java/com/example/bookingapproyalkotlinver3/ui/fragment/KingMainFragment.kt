@@ -14,6 +14,7 @@ import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.databinding.FragmentKingMainBinding
 import com.example.bookingapproyalkotlinver3.ui.adapter.KingPagerAdapter
+import com.example.bookingapproyalkotlinver3.ui.customview.toast.CookieBar
 
 
 class KingMainFragment : BaseViewModelFragment<FragmentKingMainBinding>()  {
@@ -67,9 +68,16 @@ class KingMainFragment : BaseViewModelFragment<FragmentKingMainBinding>()  {
             override fun handleOnBackPressed() {
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - backPressedTime > BACK_PRESS_INTERVAL) {
-                    Toast.makeText(
-                        requireContext(), getString(R.string.dup_back), Toast.LENGTH_SHORT
-                    ).show()
+                    CookieBar.build(requireActivity())
+                        .setTitle(getString(R.string.Notify))
+                        .setMessage(getString(R.string.dup_back))
+                        .setIcon(R.drawable.ic_warning_icon_check)
+                        .setTitleColor(R.color.black)
+                        .setMessageColor(R.color.black)
+                        .setDuration(3000)
+                        .setBackgroundRes(R.drawable.background_toast)
+                        .setCookiePosition(CookieBar.BOTTOM)
+                        .show()
                     backPressedTime = currentTime
                 } else {
                     isEnabled = false
