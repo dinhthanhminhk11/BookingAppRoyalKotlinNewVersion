@@ -37,44 +37,31 @@ class LoginFragment : BaseViewModelFragment<FragmentLoginBinding>() {
         }
         binding.btnSignIn.setOnClickListener {
             if (binding.edEmail.text.isEmpty()) {
-                CookieBar.build(requireActivity())
-                    .setTitle(getString(R.string.Notify))
+                CookieBar.build(requireActivity()).setTitle(getString(R.string.Notify))
                     .setMessage(getString(R.string.enterMail))
-                    .setIcon(R.drawable.ic_warning_icon_check)
-                    .setTitleColor(R.color.black)
-                    .setMessageColor(R.color.black)
-                    .setDuration(3000)
+                    .setIcon(R.drawable.ic_warning_icon_check).setTitleColor(R.color.black)
+                    .setMessageColor(R.color.black).setDuration(3000)
                     .setBackgroundRes(R.drawable.background_toast)
-                    .setCookiePosition(CookieBar.BOTTOM)
-                    .show()
+                    .setCookiePosition(CookieBar.BOTTOM).show()
             } else if (!isValidEmail(binding.edEmail.text.toString())) {
-                CookieBar.build(requireActivity())
-                    .setTitle(getString(R.string.Notify))
+                CookieBar.build(requireActivity()).setTitle(getString(R.string.Notify))
                     .setMessage(getString(R.string.enterMailFaild))
-                    .setIcon(R.drawable.ic_warning_icon_check)
-                    .setTitleColor(R.color.black)
-                    .setMessageColor(R.color.black)
-                    .setDuration(3000)
+                    .setIcon(R.drawable.ic_warning_icon_check).setTitleColor(R.color.black)
+                    .setMessageColor(R.color.black).setDuration(3000)
                     .setBackgroundRes(R.drawable.background_toast)
-                    .setCookiePosition(CookieBar.BOTTOM)
-                    .show()
+                    .setCookiePosition(CookieBar.BOTTOM).show()
             } else if (binding.edPass.text.isEmpty()) {
-                CookieBar.build(requireActivity())
-                    .setTitle(getString(R.string.Notify))
+                CookieBar.build(requireActivity()).setTitle(getString(R.string.Notify))
                     .setMessage(getString(R.string.enterPass))
-                    .setIcon(R.drawable.ic_warning_icon_check)
-                    .setTitleColor(R.color.black)
-                    .setMessageColor(R.color.black)
-                    .setDuration(3000)
+                    .setIcon(R.drawable.ic_warning_icon_check).setTitleColor(R.color.black)
+                    .setMessageColor(R.color.black).setDuration(3000)
                     .setBackgroundRes(R.drawable.background_toast)
-                    .setCookiePosition(CookieBar.BOTTOM)
-                    .show()
+                    .setCookiePosition(CookieBar.BOTTOM).show()
             } else {
                 isLoaded(true)
                 viewModel.login(
                     UserLogin(
-                        binding.edEmail.text.toString(),
-                        binding.edPass.text.toString()
+                        binding.edEmail.text.toString(), binding.edPass.text.toString()
                     )
                 )
             }
@@ -87,7 +74,7 @@ class LoginFragment : BaseViewModelFragment<FragmentLoginBinding>() {
                 is Resource.Success -> {
                     isLoaded(false)
                     it.data?.let { it ->
-                        if(it.status){
+                        if (it.status) {
                             MySharedPreferences.getInstance(requireActivity())
                                 .putString(AppConstant.TOKEN_USER, it.token)
                             if (it.user.active) {
@@ -106,17 +93,12 @@ class LoginFragment : BaseViewModelFragment<FragmentLoginBinding>() {
                             } else {
                                 // trường hợp email chưa xác thực
                             }
-                        }else{
-                            CookieBar.build(requireActivity())
-                                .setTitle(getString(R.string.Notify))
-                                .setMessage(it.message)
-                                .setIcon(R.drawable.ic_warning_icon_check)
-                                .setTitleColor(R.color.black)
-                                .setMessageColor(R.color.black)
-                                .setDuration(3000)
-                                .setBackgroundRes(R.drawable.background_toast)
-                                .setCookiePosition(CookieBar.BOTTOM)
-                                .show()
+                        } else {
+                            CookieBar.build(requireActivity()).setTitle(getString(R.string.Notify))
+                                .setMessage(it.message).setIcon(R.drawable.ic_warning_icon_check)
+                                .setTitleColor(R.color.black).setMessageColor(R.color.black)
+                                .setDuration(3000).setBackgroundRes(R.drawable.background_toast)
+                                .setCookiePosition(CookieBar.BOTTOM).show()
                         }
                     }
                 }
@@ -136,8 +118,7 @@ class LoginFragment : BaseViewModelFragment<FragmentLoginBinding>() {
     }
 
     override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
+        inflater: LayoutInflater, container: ViewGroup?
     ): FragmentLoginBinding = FragmentLoginBinding.inflate(inflater, container, false)
 
 

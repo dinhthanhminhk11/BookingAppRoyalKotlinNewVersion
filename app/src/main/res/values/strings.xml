@@ -69,9 +69,12 @@
     <string name="nearby_arrays">Gần tôi</string>
     <string name="bookmark_arrays">Yêu thích</string>
     <string name="notification_arrays">Thông báo</string>
+    <string name="notification_arrays_text">Hiện tại bạn chưa có thông báo nào</string>
     <string name="message_arrays">Tin nhắn</string>
     <string name="setting_arrays">Cài đặt</string>
     <string name="help_arrays">Trợ giúp</string>
+    <string name="info_myself">Thông tin cá nhân</string>
+    <string name="info_myself_edit">Thay đổi thông tin cá nhân của bạn</string>
     <string name="logout_arrays">Đăng xuất</string>
     <string name="LoginSuccess">Sign in successfully</string>
     <string name="LoginFailed">Tài khoản hoặc mật khẩu không chính xác</string>
@@ -235,6 +238,7 @@
     <string name="AccSetting">Tài Khoản</string>
     <string name="Settings">Cài đặt</string>
     <string name="LanguageSetting">Ngôn ngữ</string>
+    <string name="LanguageSetting_text">Chọn ngôn ngữ của bạn</string>
     <string name="LanguageSetting2">Thay đổi mật khẩu của bạn</string>
     <string name="infoRoyal">Những thông tin về chúng tôi</string>
     <string name="DarkmodeSetting">Dark mode</string>
@@ -248,6 +252,7 @@
 
 
     <string name="question_bookmard">Bạn không tìm thấy đặt phòng/đặt chỗ của mình ở đây? Truy cập Trung tâm trợ giúp</string>
+    <string name="question_bookmard2">Trung tâm trợ giúp</string>
     <string name="question_help1">Các câu hỏi thường gặp</string>
     <string name="question_help2">Thông tin chung</string>
     <string name="question_help3">Tìm khách sạn</string>
