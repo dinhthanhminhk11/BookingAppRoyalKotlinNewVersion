@@ -8,4 +8,14 @@ object UserClient {
     var phone: String? = null
     var address: String? = null
     var countBooking: Int = 0
+
+    fun setUserFromUser(user: User) {
+        id = user.id
+        name = user.name
+        email = user.email
+        image = user.image
+        phone = user.phone
+        address = user.address
+        countBooking = user.countBooking
+    }
 }

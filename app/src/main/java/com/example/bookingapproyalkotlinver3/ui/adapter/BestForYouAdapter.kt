@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.bookingapproyalkotlinver3.R
+import com.example.bookingapproyalkotlinver3.constant.loadImage
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Hotel
+import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
 import com.example.bookingapproyalkotlinver3.databinding.ItemBestforyouHomefragmentBinding
 
 class BestForYouAdapter : RecyclerView.Adapter<BestForYouAdapter.ViewHolder>() {
@@ -40,20 +42,12 @@ class BestForYouAdapter : RecyclerView.Adapter<BestForYouAdapter.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(item: Hotel, position: Int) {
-            val options =
-                RequestOptions().centerCrop().placeholder(R.drawable.imageloading)
-                    .error(R.drawable.imageerror)
+            loadImage(binding.imgItemBestForYou.context, item.images[0], binding.imgItemBestForYou)
+            loadImage(binding.icon1.context, item.convenient[0].iconImage, binding.icon1)
+            loadImage(binding.icon2.context, item.convenient[1].iconImage, binding.icon2)
 
-            Glide.with(binding.imgItemBestForYou.context).load(item.images[0]).apply(options)
-                .into(binding.imgItemBestForYou)
             binding.tvNameHouseItemBestforyou.text= item.name
             binding.tvPriceHouseItemBestforyou.text = item.giaDaoDong
-
-            Glide.with(binding.imgItemBestForYou.context).load(item.convenient[0].iconImage).apply(options)
-                .into(binding.icon1)
-
-            Glide.with(binding.imgItemBestForYou.context).load(item.convenient[1].iconImage).apply(options)
-                .into(binding.icon2)
 
             binding.nameIcon1.text = item.convenient[0].name
             binding.tvNameIcon1.text = item.convenient[1].name

@@ -20,6 +20,7 @@ import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
 import com.example.bookingapproyalkotlinver3.data.model.user.LoginResponse
+import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
 import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
 import com.example.bookingapproyalkotlinver3.data.repository.Repository
 import com.example.bookingapproyalkotlinver3.data.util.Resource
@@ -76,9 +77,7 @@ class MainViewModel @Inject constructor(
         try {
             if (isNetworkAvailable(app)) {
                 val apiResult = repository.getUserByToken(token)
-                loginResponse.postValue(apiResult)
-            } else {
-                loginResponse.postValue(Resource.Error("Internet is not available"))
+                apiResult.data?.let { UserClient.setUserFromUser(it.user) }
             }
         } catch (e: Exception) {
             loginResponse.postValue(Resource.Error(e.message.toString()))

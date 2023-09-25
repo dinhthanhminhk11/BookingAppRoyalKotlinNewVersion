@@ -3,6 +3,7 @@ package com.example.bookingapproyalkotlinver3.data.model
 import com.example.bookingapproyalkotlinver3.R
 
 data class SettingItem(
+    val tag: String? = null,
     val viewType: Int,
     val background: Int,
     val iconResourceLeft: Int,

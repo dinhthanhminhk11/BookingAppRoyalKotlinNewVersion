@@ -430,7 +430,10 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                 ageChildren = MySharedPreferences.getInstance(requireActivity())
                     .getInt(AppConstant.SHAREDPREFERENCES_USER_AGE_CHILDREN, 1)
                 var textSearch = MySharedPreferences.getInstance(requireActivity())
-                    .getString(AppConstant.SHAREDPREFERENCES_USER_TEXT_SEARCH, "Khách sạn gần nhất")
+                    .getString(
+                        AppConstant.SHAREDPREFERENCES_USER_TEXT_SEARCH,
+                        getString(R.string.Nearest_Hotels)
+                    )
 
                 binding.countRoom.text = "$countRoom ${getString(R.string.Room)}"
                 binding.countChildren.text = "$countChildren ${getString(R.string.Children)}"

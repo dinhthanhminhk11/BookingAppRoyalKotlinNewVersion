@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_15dp"
     android:text="@string/textHoso"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:textColor="@color/black"
     android:textSize="@dimen/_30dp"
     android:textStyle="bold" />

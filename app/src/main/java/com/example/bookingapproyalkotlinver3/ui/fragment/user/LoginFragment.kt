@@ -79,13 +79,7 @@ class LoginFragment : BaseViewModelFragment<FragmentLoginBinding>() {
                                 .putString(AppConstant.TOKEN_USER, it.token)
                             if (it.user.active) {
                                 if (it.user.checkAccount) {
-                                    UserClient.email = it.user.email
-                                    UserClient.id = it.user.id
-                                    UserClient.name = it.user.name
-                                    UserClient.image = it.user.image
-                                    UserClient.phone = it.user.phone
-                                    UserClient.address = it.user.address
-                                    UserClient.countBooking = it.user.countBooking
+                                    UserClient.setUserFromUser(it.user)
                                     findNavController().popBackStack()
                                 } else {
                                     // trường hợp account bị ban
