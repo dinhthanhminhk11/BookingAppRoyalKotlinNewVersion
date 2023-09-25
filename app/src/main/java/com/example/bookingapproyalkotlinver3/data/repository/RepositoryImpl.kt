@@ -1,5 +1,6 @@
 package com.example.bookingapproyalkotlinver3.data.repository
 
+import com.example.bookingapproyalkotlinver3.data.model.TextResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
@@ -29,6 +30,9 @@ class RepositoryImpl(
 
     override suspend fun getListNotification(id: String): Resource<NotiResponse> =
         responseToResource(remoteDataSource.getListNotification(id))
+
+    override suspend fun updateNotificationSeen(id: String): Resource<TextResponse> =
+        responseToResource(remoteDataSource.updateNotificationSeen(id))
 
 
     private fun <T> responseToResource(response: Response<T>): Resource<T> {

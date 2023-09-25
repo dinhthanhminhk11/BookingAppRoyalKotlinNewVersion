@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bookingapproyalkotlinver3.R
 import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
 import com.example.bookingapproyalkotlinver3.constant.loadImage
-import com.example.bookingapproyalkotlinver3.data.model.hotel.Hotel
 import com.example.bookingapproyalkotlinver3.data.model.notification.Notification
 import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
 import com.example.bookingapproyalkotlinver3.data.util.Resource
 import com.example.bookingapproyalkotlinver3.databinding.FragmentNotificationBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemLayoutNotificationBinding
+import com.example.bookingapproyalkotlinver3.ui.adapter.loading.ShimmerNearByFromYouAdapter
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,6 +24,7 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
     private lateinit var notificationAdapter: NotificationAdapter
     override fun initView() {
         initToolbar()
+        binding.listNotification.layoutManager = LinearLayoutManager(requireActivity())
     }
 
     private fun initToolbar() {
@@ -35,13 +36,10 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
     }
 
     override fun initOnClickListener() {
-//        notificationAdapter.setOnItemClickListener {
-//            if (it.isSeem) {
-//                // update trangj thai xem
-//            } else {
-//
-//            }
-//        }
+        binding.reLoad.setOnRefreshListener {
+            viewModel.getListNotification(UserClient.id.toString())
+            binding.reLoad.isRefreshing = false
+        }
     }
 
     override fun observeLiveData() {
@@ -50,9 +48,15 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
                 is Resource.Success -> {
                     it.data?.let {
                         notificationAdapter = NotificationAdapter(it.data)
+                        notificationAdapter.setOnItemClickListener { notification ->
+                            if (notification.isSeem) {
+                                viewModel.updateNotification(notification.id)
+                            } else {
+
+                            }
+                        }
                         binding.listNotification.apply {
                             adapter = notificationAdapter
-                            layoutManager = LinearLayoutManager(requireActivity())
                         }
                     }
                 }
@@ -73,6 +77,10 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
     }
 
     override fun initData() {
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getListNotification(UserClient.id.toString())
     }
 

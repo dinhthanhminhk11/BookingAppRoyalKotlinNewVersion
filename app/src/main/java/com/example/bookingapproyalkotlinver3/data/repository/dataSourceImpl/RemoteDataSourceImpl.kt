@@ -1,6 +1,7 @@
 package com.example.bookingapproyalkotlinver3.data.repository.dataSourceImpl
 
 import com.example.bookingapproyalkotlinver3.data.api.APIService
+import com.example.bookingapproyalkotlinver3.data.model.TextResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
@@ -23,4 +24,6 @@ class RemoteDataSourceImpl(private val apiService: APIService) : RemoteDataSourc
 
     override suspend fun getListNotification(id: String): Response<NotiResponse> =
         apiService.getListNotification(id)
+
+    override suspend fun updateNotificationSeen(id: String): Response<TextResponse> = apiService.updateNotificationSeen(id)
 }

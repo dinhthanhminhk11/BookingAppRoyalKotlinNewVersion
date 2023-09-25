@@ -62,6 +62,15 @@ class MainViewModel @Inject constructor(
             }
         }
 
+    fun updateNotification(id: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            if (isNetworkAvailable(app)) {
+                repository.updateNotificationSeen(id)
+            }
+        } catch (e: Exception) {
+        }
+    }
+
     fun login(userLogin: UserLogin) = viewModelScope.launch(Dispatchers.IO) {
         try {
             if (isNetworkAvailable(app)) {
