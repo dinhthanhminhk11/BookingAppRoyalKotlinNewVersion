@@ -1,7 +1,6 @@
 package com.example.bookingapproyalkotlinver3.ui.fragment.home
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -29,8 +28,8 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding>() {
     val listSetting = mutableListOf<SettingItem>()
 
     override fun initView() {
-        val token = MySharedPreferences.getInstance(requireActivity())
-            .getString(AppConstant.TOKEN_USER, "")
+        val token =
+            MySharedPreferences.getInstance(requireActivity()).getString(AppConstant.TOKEN_USER, "")
 
         createListSetting(token)
 
@@ -54,8 +53,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding>() {
         inflater: LayoutInflater, container: ViewGroup?
     ): FragmentProfileBinding = FragmentProfileBinding.inflate(inflater, container, false)
 
-    inner class SettingAdapter() :
-        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class SettingAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val DEFAULT_TYPE = 1
         private val CHECK_LOGIN_TYPE = 2
         private val TEXT_VIEW_TYPE = 3
@@ -242,46 +240,40 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding>() {
                         iconResourceLeft = R.drawable.baseline_person_outline_24,
                         title = getString(R.string.info_myself),
                         description = getString(R.string.info_myself_edit)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         viewType = 3,
                         background = 20,
                         iconResourceLeft = 0,
                         title = getString(R.string.setting_arrays),
                         description = ""
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_CHANG_LANGUAGE,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
                         iconResourceLeft = R.drawable.ic_internet_language_settings_ver3,
                         title = getString(R.string.LanguageSetting),
                         description = getString(R.string.LanguageSetting_text)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_CHANG_THEME,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
                         iconResourceLeft = R.drawable.ic_group_moon_setting,
                         title = getString(R.string.theme),
                         description = getString(R.string.Light)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         viewType = 3,
                         background = 20,
                         iconResourceLeft = 0,
                         title = getString(R.string.help_arrays),
                         description = ""
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_ABOUT_US,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
                         iconResourceLeft = R.drawable.ic_icon_logo_app,
                         title = getString(R.string.byRoyal),
                         description = getString(R.string.infoRoyal)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_CHANG_HELP,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
@@ -302,86 +294,75 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding>() {
                         title = UserClient.name.toString(),
                         description = getString(R.string.show_profile_text),
                         isVisible = false
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         viewType = 3,
                         background = 20,
                         iconResourceLeft = 0,
                         title = getString(R.string.setting_arrays),
                         description = ""
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_SHOW_INFO,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
                         iconResourceLeft = R.drawable.baseline_person_outline_24,
                         title = getString(R.string.info_myself),
                         description = getString(R.string.info_myself_edit)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_NOTIFICATION,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
                         iconResourceLeft = R.drawable.icon_bell_main,
                         title = getString(R.string.notification_arrays),
                         description = getString(R.string.notification_arrays_text)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_PAYMENT,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
                         iconResourceLeft = R.drawable.ic_payment_svgrepo_com,
                         title = getString(R.string.yourpayment),
                         description = getString(R.string.textInfoTextPayment)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_CHANG_PASS,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
                         iconResourceLeft = R.drawable.ic_icon_change_pass_setting,
                         title = getString(R.string.ChangePassSetting),
                         description = getString(R.string.LanguageSetting2)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_CHANG_LANGUAGE,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
                         iconResourceLeft = R.drawable.ic_internet_language_settings_ver3,
                         title = getString(R.string.LanguageSetting),
                         description = getString(R.string.LanguageSetting_text)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_CHANG_THEME,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
                         iconResourceLeft = R.drawable.ic_group_moon_setting,
                         title = getString(R.string.theme),
                         description = getString(R.string.Light)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         viewType = 3,
                         background = 20,
                         iconResourceLeft = 0,
                         title = getString(R.string.help_arrays),
                         description = ""
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_ABOUT_US,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
                         iconResourceLeft = R.drawable.ic_icon_logo_app,
                         title = getString(R.string.byRoyal),
                         description = getString(R.string.infoRoyal)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_CHANG_HELP,
                         viewType = 1,
                         background = R.drawable.background_setting_item,
                         iconResourceLeft = R.drawable.ic_helps_white_menu,
                         title = getString(R.string.question_bookmard2),
                         description = getString(R.string.question_help1)
-                    ),
-                    createSettingItem(
+                    ), createSettingItem(
                         tag = AppConstant.TAG_SETTING_LOGOUT,
                         viewType = 3,
                         background = 20,

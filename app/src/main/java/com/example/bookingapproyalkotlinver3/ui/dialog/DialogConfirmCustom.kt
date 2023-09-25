@@ -39,8 +39,13 @@ class DialogConfirmCustom(
         }
 
     }
+
     companion object {
-        fun create(context: Context, content: String? , onLogoutClick: () -> Unit): DialogConfirmCustom {
+        fun create(
+            context: Context,
+            content: String?,
+            onLogoutClick: () -> Unit
+        ): DialogConfirmCustom {
             return DialogConfirmCustom(context, content, onLogoutClick)
         }
     }

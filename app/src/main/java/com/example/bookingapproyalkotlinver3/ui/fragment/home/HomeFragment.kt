@@ -31,6 +31,7 @@ import com.example.bookingapproyalkotlinver3.ui.adapter.NearFromYouAdapter
 import com.example.bookingapproyalkotlinver3.ui.adapter.loading.ShimmerBestForYouAdapter
 import com.example.bookingapproyalkotlinver3.ui.adapter.loading.ShimmerNearByFromYouAdapter
 import com.example.bookingapproyalkotlinver3.ui.bottomsheet.BottomSheetPersonHome
+import com.example.bookingapproyalkotlinver3.ui.dialog.DialogConfirmLogin
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
@@ -109,9 +110,19 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         }
 
         binding.bellMain.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_kingMainFragment_to_notificationFragment
-            )
+            if (MySharedPreferences.getInstance(requireActivity())
+                    .getString(AppConstant.TOKEN_USER, "").isNullOrEmpty()
+            ) {
+                DialogConfirmLogin.create(requireActivity()) {
+                    findNavController().navigate(
+                        R.id.action_kingMainFragment_to_loginFragment
+                    )
+                }.show()
+            } else {
+                findNavController().navigate(
+                    R.id.action_kingMainFragment_to_notificationFragment
+                )
+            }
         }
     }
 
@@ -437,9 +448,9 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                 ageChildren = MySharedPreferences.getInstance(requireActivity())
                     .getInt(AppConstant.SHAREDPREFERENCES_USER_AGE_CHILDREN, 1)
                 var textSearch = MySharedPreferences.getInstance(requireActivity()).getString(
-                        AppConstant.SHAREDPREFERENCES_USER_TEXT_SEARCH,
-                        getString(R.string.Nearest_Hotels)
-                    )
+                    AppConstant.SHAREDPREFERENCES_USER_TEXT_SEARCH,
+                    getString(R.string.Nearest_Hotels)
+                )
 
                 binding.countRoom.text = "$countRoom ${getString(R.string.Room)}"
                 binding.countChildren.text = "$countChildren ${getString(R.string.Children)}"

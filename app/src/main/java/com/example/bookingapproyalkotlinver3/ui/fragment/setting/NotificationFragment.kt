@@ -1,6 +1,7 @@
 package com.example.bookingapproyalkotlinver3.ui.fragment.setting
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,7 +15,6 @@ import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
 import com.example.bookingapproyalkotlinver3.data.util.Resource
 import com.example.bookingapproyalkotlinver3.databinding.FragmentNotificationBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemLayoutNotificationBinding
-import com.example.bookingapproyalkotlinver3.ui.adapter.loading.ShimmerNearByFromYouAdapter
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,6 +47,8 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
             when (it) {
                 is Resource.Success -> {
                     it.data?.let {
+                        binding.contentNullList.visibility =
+                            if (it.data.isNotEmpty()) View.VISIBLE else View.GONE
                         notificationAdapter = NotificationAdapter(it.data)
                         notificationAdapter.setOnItemClickListener { notification ->
                             if (notification.isSeem) {
