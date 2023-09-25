@@ -3,6 +3,7 @@ package com.example.bookingapproyalkotlinver3.data.repository
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
+import com.example.bookingapproyalkotlinver3.data.model.notification.NotiResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.LoginResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
 import com.example.bookingapproyalkotlinver3.data.repository.dataSource.LocalDataSource
@@ -25,6 +26,9 @@ class RepositoryImpl(
 
     override suspend fun getUserByToken(token: String): Resource<LoginResponse> =
         responseToResource(remoteDataSource.getUserByToken(token))
+
+    override suspend fun getListNotification(id: String): Resource<NotiResponse> =
+        responseToResource(remoteDataSource.getListNotification(id))
 
 
     private fun <T> responseToResource(response: Response<T>): Resource<T> {

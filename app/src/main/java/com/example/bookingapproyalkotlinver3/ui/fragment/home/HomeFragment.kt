@@ -44,13 +44,13 @@ import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
+    private val viewModel: MainViewModel by viewModels()
     private var currentTimeNow: Date? = null
     private var currentTimeTomorrow: Date? = null
     private var daysDiffPrivate: Int = 1
     private var checkStartDate = "";
     private var checkEndDate = "";
     private var daysDiff = 1;
-    private val viewModel: MainViewModel by viewModels()
     private var countRoom = 2
     private var countPerson = 2
     private var countChildren = 2
@@ -105,6 +105,12 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
             }
             findNavController().navigate(
                 R.id.action_kingMainFragment_to_detailHotelFragment, bundle
+            )
+        }
+
+        binding.bellMain.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_kingMainFragment_to_notificationFragment
             )
         }
     }
@@ -355,7 +361,8 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                     }
                 }
                 binding.contentPerson.setOnClickListener {
-                    val bottomSheetPersonHome = BottomSheetPersonHome(requireActivity(),
+                    val bottomSheetPersonHome = BottomSheetPersonHome(
+                        requireActivity(),
                         object : BottomSheetPersonHome.Callback {
                             override fun onCLickSum(
                                 person: Int, children: Int, room: Int, age: Int
@@ -429,8 +436,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                     .getInt(AppConstant.SHAREDPREFERENCES_USER_COUNT_CHILDREN, 2)
                 ageChildren = MySharedPreferences.getInstance(requireActivity())
                     .getInt(AppConstant.SHAREDPREFERENCES_USER_AGE_CHILDREN, 1)
-                var textSearch = MySharedPreferences.getInstance(requireActivity())
-                    .getString(
+                var textSearch = MySharedPreferences.getInstance(requireActivity()).getString(
                         AppConstant.SHAREDPREFERENCES_USER_TEXT_SEARCH,
                         getString(R.string.Nearest_Hotels)
                     )

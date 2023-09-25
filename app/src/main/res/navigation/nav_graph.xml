@@ -45,6 +45,13 @@
             app:exitAnim="@anim/fragment_slide_left_exit"
             app:popEnterAnim="@anim/fragment_slide_right_enter"
             app:popExitAnim="@anim/fragment_slide_right_exit" />
+        <action
+            android:id="@+id/action_kingMainFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment"
+            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:exitAnim="@anim/fragment_slide_left_exit"
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit" />
     </fragment>
     <fragment
         android:id="@+id/detailHotelFragment"
@@ -87,4 +94,9 @@
         android:name="com.example.bookingapproyalkotlinver3.ui.fragment.setting.HelpFragment"
         android:label="fragment_help"
         tools:layout="@layout/fragment_help" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.bookingapproyalkotlinver3.ui.fragment.setting.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
 </navigation>

@@ -1,6 +1,7 @@
 package com.example.bookingapproyalkotlinver3.ui.fragment.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -33,7 +34,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding>() {
 
         createListSetting(token)
 
-        adapterSetting = SettingAdapter(listSetting)
+        adapterSetting = SettingAdapter()
         binding.listSetting.layoutManager = LinearLayoutManager(requireActivity())
         binding.listSetting.adapter = adapterSetting
 
@@ -53,7 +54,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding>() {
         inflater: LayoutInflater, container: ViewGroup?
     ): FragmentProfileBinding = FragmentProfileBinding.inflate(inflater, container, false)
 
-    inner class SettingAdapter(private val itemList: List<SettingItem>) :
+    inner class SettingAdapter() :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val DEFAULT_TYPE = 1
         private val CHECK_LOGIN_TYPE = 2
@@ -88,6 +89,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding>() {
                         when (tag) {
                             AppConstant.TAG_SETTING_ABOUT_US -> navigateFragment(R.id.action_kingMainFragment_to_aboutUsFragment)
                             AppConstant.TAG_SETTING_CHANG_HELP -> navigateFragment(R.id.action_kingMainFragment_to_helpFragment)
+                            AppConstant.TAG_SETTING_NOTIFICATION -> navigateFragment(R.id.action_kingMainFragment_to_notificationFragment)
                             else -> {}
                         }
                     }
@@ -193,7 +195,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding>() {
             }
         }
 
-        override fun getItemCount(): Int = itemList.size
+        override fun getItemCount(): Int = listSetting.size
 
         override fun getItemViewType(position: Int): Int = listSetting[position].viewType
 
@@ -395,6 +397,10 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding>() {
 
     private fun navigateFragment(id: Int) {
         findNavController().navigate(id)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         listSetting.clear()
     }
 }

@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.home.NotificationFragment">
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.fragment.setting.NotificationFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:elevation="@dimen/_8dp"
+        android:fontFamily="@font/poppins_medium"
+        android:textAlignment="center"
+        android:theme="@style/ToolbarTheme"
+        app:titleTextColor="@color/black" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listNotification"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:overScrollMode="never" />
 
-</FrameLayout>
+</LinearLayout>

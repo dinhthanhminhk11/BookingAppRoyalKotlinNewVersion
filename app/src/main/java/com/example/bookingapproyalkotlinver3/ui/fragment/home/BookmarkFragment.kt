@@ -1,13 +1,17 @@
 package com.example.bookingapproyalkotlinver3.ui.fragment.home
 
+import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import com.example.bookingapproyalkotlinver3.R
 import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
-import com.example.bookingapproyalkotlinver3.databinding.FragmentChatBinding
-import com.example.bookingapproyalkotlinver3.databinding.FragmentHomeBinding
+import com.example.bookingapproyalkotlinver3.databinding.FragmentBookmarkBinding
 import com.example.bookingapproyalkotlinver3.databinding.FragmentNotificationBinding
 
-class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>() {
+
+class BookmarkFragment : BaseViewModelFragment<FragmentBookmarkBinding>() {
     override fun initView() {
     }
 
@@ -22,5 +26,6 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
 
     override fun inflateBinding(
         inflater: LayoutInflater, container: ViewGroup?
-    ): FragmentNotificationBinding = FragmentNotificationBinding.inflate(inflater, container, false)
+    ): FragmentBookmarkBinding = FragmentBookmarkBinding.inflate(inflater, container, false)
+
 }

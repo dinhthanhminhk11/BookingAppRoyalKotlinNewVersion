@@ -19,6 +19,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
+import com.example.bookingapproyalkotlinver3.data.model.notification.NotiResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.LoginResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
 import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
@@ -44,6 +45,7 @@ class MainViewModel @Inject constructor(
     val ctyData: MutableLiveData<String> = MutableLiveData()
     val listAllHotelMutableLiveData: MutableLiveData<Resource<HotelResponse>> = MutableLiveData()
     val loginResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
+    val notificationResponse: MutableLiveData<Resource<NotiResponse>> = MutableLiveData()
     fun getListNearByHotel(locationNearByRequest: LocationNearByRequest) =
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -90,11 +92,25 @@ class MainViewModel @Inject constructor(
                 val apiResult = repository.getAllListHotel()
                 listAllHotelMutableLiveData.postValue(apiResult)
             } else {
-                resourceMutableLiveDataHotelNearBy.postValue(Resource.Error("Internet is not available"))
+                listAllHotelMutableLiveData.postValue(Resource.Error("Internet is not available"))
             }
 
         } catch (e: Exception) {
-            resourceMutableLiveDataHotelNearBy.postValue(Resource.Error(e.message.toString()))
+            listAllHotelMutableLiveData.postValue(Resource.Error(e.message.toString()))
+        }
+    }
+
+    fun getListNotification(idUser: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            if (isNetworkAvailable(app)) {
+                val apiResult = repository.getListNotification(idUser)
+                notificationResponse.postValue(apiResult)
+            } else {
+                notificationResponse.postValue(Resource.Error("Internet is not available"))
+            }
+
+        } catch (e: Exception) {
+            notificationResponse.postValue(Resource.Error(e.message.toString()))
         }
     }
 
