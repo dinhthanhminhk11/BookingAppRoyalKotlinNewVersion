@@ -48,10 +48,11 @@
         <action
             android:id="@+id/action_kingMainFragment_to_notificationFragment"
             app:destination="@id/notificationFragment"
-            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:enterAnim="@anim/slide_in"
             app:exitAnim="@anim/fragment_slide_left_exit"
-            app:popEnterAnim="@anim/fragment_slide_right_enter"
-            app:popExitAnim="@anim/fragment_slide_right_exit" />
+            app:popEnterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/fragment_slide_left_exit"
+           />
     </fragment>
     <fragment
         android:id="@+id/detailHotelFragment"

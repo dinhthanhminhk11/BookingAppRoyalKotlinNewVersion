@@ -1,11 +1,14 @@
 package com.example.bookingapproyalkotlinver3.ui.fragment.setting
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookingapproyalkotlinver3.R
 import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
@@ -24,7 +27,19 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
     private lateinit var notificationAdapter: NotificationAdapter
     override fun initView() {
         initToolbar()
-        binding.listNotification.layoutManager = LinearLayoutManager(requireActivity())
+
+        notificationAdapter = NotificationAdapter {
+            if (it.isSeem) {
+                viewModel.updateNotification(it.id)
+            } else {
+                // Xử lý khi notification chưa đọc
+            }
+        }
+
+        binding.listNotification.apply {
+            layoutManager = LinearLayoutManager(requireActivity())
+            adapter = notificationAdapter
+        }
     }
 
     private fun initToolbar() {
@@ -43,34 +58,22 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
     }
 
     override fun observeLiveData() {
-        viewModel.notificationResponse.observe(viewLifecycleOwner) {
-            when (it) {
+        viewModel.notificationResponse.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
                 is Resource.Success -> {
-                    it.data?.let {
+                    resource.data?.let { notifications ->
+                        val notificationList = notifications.data
                         binding.contentNullList.visibility =
-                            if (it.data.isNotEmpty()) View.VISIBLE else View.GONE
-                        notificationAdapter = NotificationAdapter(it.data)
-                        notificationAdapter.setOnItemClickListener { notification ->
-                            if (notification.isSeem) {
-                                viewModel.updateNotification(notification.id)
-                            } else {
-
-                            }
-                        }
-                        binding.listNotification.apply {
-                            adapter = notificationAdapter
-                        }
+                            if (notificationList.isNotEmpty()) View.VISIBLE else View.GONE
+                        notificationAdapter.submitList(notificationList)
                     }
                 }
 
                 is Resource.Error -> {
-                    it.message?.let {
-
-                    }
+                    resource.message?.let {}
                 }
 
                 is Resource.Loading -> {
-
                 }
 
                 else -> {}
@@ -90,10 +93,10 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
         inflater: LayoutInflater, container: ViewGroup?
     ): FragmentNotificationBinding = FragmentNotificationBinding.inflate(inflater, container, false)
 
-    inner class NotificationAdapter(private val data: List<Notification>?) :
-        RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
-        private var backgroundNotSeem: Int = R.drawable.background_not_seem
-        private var backgroundSeem: Int = R.drawable.background_seem
+    inner class NotificationAdapter(
+        private val onItemClickListener: (Notification) -> Unit
+    ) : ListAdapter<Notification, NotificationAdapter.ViewHolder>(NotificationDiffCallback()) {
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val binding = ItemLayoutNotificationBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
@@ -101,16 +104,15 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
             return ViewHolder(binding)
         }
 
-        override fun getItemCount(): Int = data?.size ?: 0
-
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val notification = data?.get(position)
-            notification?.let { holder.bind(it) }
+            val notification = getItem(position)
+            holder.bind(notification)
         }
-
 
         inner class ViewHolder(val binding: ItemLayoutNotificationBinding) :
             RecyclerView.ViewHolder(binding.root) {
+
+            @SuppressLint("SetTextI18n")
             fun bind(item: Notification) {
                 loadImage(itemView.context, item.imageHoust, binding.image)
 
@@ -119,22 +121,25 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
                 binding.title.text = item.title
 
                 if (item.isSeem) {
-                    itemView.setBackgroundResource(backgroundNotSeem)
+                    itemView.setBackgroundResource(R.drawable.background_not_seem)
                 } else {
-                    itemView.setBackgroundResource(backgroundSeem)
+                    itemView.setBackgroundResource(R.drawable.background_seem)
                 }
 
                 binding.root.setOnClickListener {
-                    onItemClickListener?.let {
-                        it(item)
-                    }
+                    onItemClickListener.invoke(item)
                 }
             }
         }
+    }
 
-        private var onItemClickListener: ((Notification) -> Unit)? = null
-        fun setOnItemClickListener(listener: (Notification) -> Unit) {
-            onItemClickListener = listener
+    class NotificationDiffCallback : DiffUtil.ItemCallback<Notification>() {
+        override fun areItemsTheSame(oldItem: Notification, newItem: Notification): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Notification, newItem: Notification): Boolean {
+            return oldItem == newItem
         }
     }
 }
