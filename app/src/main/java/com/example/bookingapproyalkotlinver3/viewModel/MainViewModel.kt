@@ -16,6 +16,8 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bookingapproyalkotlinver3.data.model.bookmark.BookmarkResponse
+import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
@@ -46,6 +48,8 @@ class MainViewModel @Inject constructor(
     val listAllHotelMutableLiveData: MutableLiveData<Resource<HotelResponse>> = MutableLiveData()
     val loginResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
     val notificationResponse: MutableLiveData<Resource<NotiResponse>> = MutableLiveData()
+    val bookmarkResponse: MutableLiveData<Resource<BookmarkResponse>> = MutableLiveData()
+    val hotelResponse: MutableLiveData<Resource<HotelById>> = MutableLiveData()
     fun getListNearByHotel(locationNearByRequest: LocationNearByRequest) =
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -120,6 +124,34 @@ class MainViewModel @Inject constructor(
 
         } catch (e: Exception) {
             notificationResponse.postValue(Resource.Error(e.message.toString()))
+        }
+    }
+
+    fun getListBookmarkByUser(idUser: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            if (isNetworkAvailable(app)) {
+                val apiResult = repository.getListBookmarkByUser(idUser)
+                bookmarkResponse.postValue(apiResult)
+            } else {
+                bookmarkResponse.postValue(Resource.Error("Internet is not available"))
+            }
+
+        } catch (e: Exception) {
+            bookmarkResponse.postValue(Resource.Error(e.message.toString()))
+        }
+    }
+
+    fun getHotelById(idHotel: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            if (isNetworkAvailable(app)) {
+                val apiResult = repository.getHotelById(idHotel)
+                hotelResponse.postValue(apiResult)
+            } else {
+                hotelResponse.postValue(Resource.Error("Internet is not available"))
+            }
+
+        } catch (e: Exception) {
+            hotelResponse.postValue(Resource.Error(e.message.toString()))
         }
     }
 

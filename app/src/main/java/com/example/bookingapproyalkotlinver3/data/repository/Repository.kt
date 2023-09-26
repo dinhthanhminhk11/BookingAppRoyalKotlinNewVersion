@@ -1,6 +1,8 @@
 package com.example.bookingapproyalkotlinver3.data.repository
 
 import com.example.bookingapproyalkotlinver3.data.model.TextResponse
+import com.example.bookingapproyalkotlinver3.data.model.bookmark.BookmarkResponse
+import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
@@ -17,4 +19,6 @@ interface Repository {
     suspend fun getUserByToken(token: String): Resource<LoginResponse>
     suspend fun getListNotification(id: String): Resource<NotiResponse>
     suspend fun updateNotificationSeen(id: String): Resource<TextResponse>
+    suspend fun getListBookmarkByUser( id: String): Resource<BookmarkResponse>
+    suspend fun getHotelById( id: String): Resource<HotelById>
 }

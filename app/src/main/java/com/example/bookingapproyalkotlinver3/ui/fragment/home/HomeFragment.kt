@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,7 +92,8 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
 
         nearFromYouAdapter.setOnItemClickListener { hotel, position ->
             val bundle = Bundle().apply {
-                putSerializable(AppConstant.HOTEL_EXTRA, hotel)
+                putSerializable(AppConstant.HOTEL_EXTRA, hotel._id)
+                Log.e("Minh" ,hotel._id)
             }
             findNavController().navigate(
                 R.id.action_kingMainFragment_to_detailHotelFragment, bundle
@@ -102,7 +104,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
 
         bestForYouAdapter.setOnItemClickListener { hotel, _ ->
             val bundle = Bundle().apply {
-                putSerializable(AppConstant.HOTEL_EXTRA, hotel)
+                putSerializable(AppConstant.HOTEL_EXTRA, hotel._id)
             }
             findNavController().navigate(
                 R.id.action_kingMainFragment_to_detailHotelFragment, bundle

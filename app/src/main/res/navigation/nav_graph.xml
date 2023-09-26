@@ -51,8 +51,7 @@
             app:enterAnim="@anim/slide_in"
             app:exitAnim="@anim/fragment_slide_left_exit"
             app:popEnterAnim="@anim/slide_in"
-            app:popExitAnim="@anim/fragment_slide_left_exit"
-           />
+            app:popExitAnim="@anim/fragment_slide_left_exit" />
     </fragment>
     <fragment
         android:id="@+id/detailHotelFragment"
