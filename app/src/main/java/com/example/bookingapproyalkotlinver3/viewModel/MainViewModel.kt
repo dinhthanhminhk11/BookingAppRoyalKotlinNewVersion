@@ -17,6 +17,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bookingapproyalkotlinver3.data.model.bookmark.BookmarkResponse
+import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
@@ -49,7 +50,9 @@ class MainViewModel @Inject constructor(
     val loginResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
     val notificationResponse: MutableLiveData<Resource<NotiResponse>> = MutableLiveData()
     val bookmarkResponse: MutableLiveData<Resource<BookmarkResponse>> = MutableLiveData()
+    val bookmarkCheckHotelResponse: MutableLiveData<Resource<BookmarkResponse>> = MutableLiveData()
     val hotelResponse: MutableLiveData<Resource<HotelById>> = MutableLiveData()
+    val dataFeedBack: MutableLiveData<Resource<DataFeedBack>> = MutableLiveData()
     fun getListNearByHotel(locationNearByRequest: LocationNearByRequest) =
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -141,6 +144,21 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun getBookmarkByIdUserAndIdHouse(idUser: String, idHotel: String) =
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                if (isNetworkAvailable(app)) {
+                    val apiResult = repository.getBookmarkByIdUserAndIdHouse(idUser, idHotel)
+                    bookmarkCheckHotelResponse.postValue(apiResult)
+                } else {
+                    bookmarkCheckHotelResponse.postValue(Resource.Error("Internet is not available"))
+                }
+
+            } catch (e: Exception) {
+                bookmarkCheckHotelResponse.postValue(Resource.Error(e.message.toString()))
+            }
+        }
+
     fun getHotelById(idHotel: String) = viewModelScope.launch(Dispatchers.IO) {
         try {
             if (isNetworkAvailable(app)) {
@@ -154,6 +172,21 @@ class MainViewModel @Inject constructor(
             hotelResponse.postValue(Resource.Error(e.message.toString()))
         }
     }
+
+    fun getListFeedBack(idHotel: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            if (isNetworkAvailable(app)) {
+                val apiResult = repository.getFeedBack(idHotel)
+                dataFeedBack.postValue(apiResult)
+            } else {
+                dataFeedBack.postValue(Resource.Error("Internet is not available"))
+            }
+
+        } catch (e: Exception) {
+            dataFeedBack.postValue(Resource.Error(e.message.toString()))
+        }
+    }
+
 
     private fun isNetworkAvailable(context: Context?): Boolean {
         if (context == null) return false

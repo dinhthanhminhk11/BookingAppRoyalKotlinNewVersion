@@ -1,39 +1,47 @@
 package com.example.bookingapproyalkotlinver3.ui.fragment
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
+import android.graphics.Color
+import android.graphics.Paint
+import android.text.format.DateUtils
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
-import android.widget.ListAdapter
-import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.bookingapproyalkotlinver3.R
 import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
+import com.example.bookingapproyalkotlinver3.constant.MySharedPreferences
 import com.example.bookingapproyalkotlinver3.constant.loadImage
 import com.example.bookingapproyalkotlinver3.constant.setUnderlinedText
+import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
+import com.example.bookingapproyalkotlinver3.data.model.feedback.FeedBack
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Convenient
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
-import com.example.bookingapproyalkotlinver3.data.model.notification.Notification
+import com.example.bookingapproyalkotlinver3.data.model.hotel.Room
+import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
 import com.example.bookingapproyalkotlinver3.data.util.Resource
 import com.example.bookingapproyalkotlinver3.databinding.FragmentDetailHotelActivityBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemConvenientBinding
+import com.example.bookingapproyalkotlinver3.databinding.ItemFeedbackBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemGalleryBinding
+import com.example.bookingapproyalkotlinver3.databinding.ItemRoomHotelBinding
+import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.IndicatorView.animation.type.IndicatorAnimationType
+import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.SliderAnimations
+import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.SliderView
+import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.SliderViewAdapter
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.DecimalFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -42,6 +50,8 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
     private var isClickSpeed: Boolean = false
     private lateinit var galleryAdapter: GalleryAdapter
     private lateinit var convenientAdapter: ConvenientAdapter
+    private lateinit var roomHotelAdapter: RoomHotelAdapter
+    private lateinit var feedbackAdapter: FeedbackAdapter
     override fun initView() {
         binding.back.setOnClickListener {
             findNavController().popBackStack()
@@ -61,6 +71,25 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
             }
             binding.bookmark.setImageResource(iconResource)
         }
+
+        binding.btnRentNow.setOnClickListener {
+            val positionScroll = binding.contentCancellationPolicy.height
+            val positionScroll2 = binding.contentHost.height
+            val positionScroll3 = binding.contentConvenient.height
+            val positionScroll4 = binding.contentImageHotel.height
+            val positionScroll5 = binding.contentLocation.height
+            val positionScroll6 = binding.contentFeedback.height
+            val positionScroll7 = binding.contentOpenAndEndingHotel.height
+            val positionScroll8 = binding.contentPolicy.height
+            val positionScroll9 = binding.contentCancelBooking.height
+            val positionScroll10 = binding.contentMedican.height
+            val sum =
+                positionScroll + positionScroll2 + positionScroll3 + positionScroll4 + positionScroll5 + positionScroll6 + positionScroll7 + positionScroll8 + positionScroll9 + positionScroll10
+
+            binding.scrollView.post {
+                binding.scrollView.scrollTo(0, sum)
+            }
+        }
     }
 
     override fun observeLiveData() {
@@ -69,6 +98,7 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
                 is Resource.Success -> {
                     it.data?.let {
                         binding.progressBar.visibility = View.GONE
+                        binding.scrollView.visibility = View.VISIBLE
                         loadData(it)
                     }
                 }
@@ -84,6 +114,86 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
                     binding.progressBar.visibility = View.VISIBLE
                 }
             }
+        }
+
+        viewModel.dataFeedBack.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    it.data?.let {
+                        binding.progressBar.visibility = View.GONE
+                        loadDataFeedback(it)
+                    }
+                }
+
+                is Resource.Loading -> {
+                    it.message?.let {
+                        binding.progressBar.visibility = View.VISIBLE
+                        showSnackbar(requireView(), it)
+                    }
+                }
+
+                is Resource.Error -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        viewModel.bookmarkCheckHotelResponse.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    it.data?.let {
+                        if (it.data.size > 0) {
+                            if (it.data[0].isCheck) {
+                                binding.bookmark.setImageResource(R.drawable.ic_baseline_bookmark_24_white_full)
+                                isClickSpeed = false
+                            }
+                        } else {
+                            binding.bookmark.setImageResource(R.drawable.ic_baseline_bookmark_border_24_menu_toolbar)
+                            isClickSpeed = true
+                        }
+                    }
+                }
+
+                is Resource.Loading -> {
+                    it.message?.let {
+                    }
+                }
+
+                is Resource.Error -> {
+                }
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun loadDataFeedback(it: DataFeedBack) {
+        feedbackAdapter = FeedbackAdapter(it.data)
+        binding.rcvFeedback.apply {
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = feedbackAdapter
+        }
+
+        if (it.data.isNotEmpty()) {
+            val total = it.data.sumBy { feedback -> feedback.sao }
+            val average = total.toFloat() / it.data.size
+            val decimalFormat = DecimalFormat("#.#")
+
+            binding.btnDanhGia.text = "${it.data.size} " + getString(R.string.Assess)
+            binding.tvTotalFeedback.text = "${it.data.size} " + getString(R.string.Assess)
+            binding.btnDanhGia.setUnderlinedText(binding.btnDanhGia.text.toString())
+
+            if (average % 1 == 0f) {
+                binding.tvCountSao.text = decimalFormat.format(average) + ".0"
+            } else {
+                binding.tvCountSao.text = decimalFormat.format(average)
+            }
+
+//                            feedbackViewModel.updateSaoProduct(idHotel, average.toDouble())
+        } else {
+            binding.btnDanhGia.text = getString(R.string.Assess)
+            binding.tvCountSao.text = "5.0"
+            binding.tvTotalFeedback.text = "0 " + getString(R.string.Assess)
         }
     }
 
@@ -117,6 +227,18 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
         binding.rcvConvenient.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = convenientAdapter
+        }
+        roomHotelAdapter = RoomHotelAdapter(it.dataRoom)
+        binding.rcvRoom.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = roomHotelAdapter
+        }
+
+        viewModel.getListFeedBack(it.dataHotel._id)
+        if (!MySharedPreferences.getInstance(requireActivity())
+                .getString(AppConstant.TOKEN_USER, "").isNullOrEmpty()
+        ) {
+            viewModel.getBookmarkByIdUserAndIdHouse(UserClient.id.toString(), it.dataHotel._id)
         }
     }
 
@@ -203,6 +325,164 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
                 loadImage(binding.image.context, item.iconImage, binding.image)
                 binding.name.text = item.name
             }
+        }
+    }
+
+    inner class FeedbackAdapter(private val feedbackList: List<FeedBack>) :
+        RecyclerView.Adapter<FeedbackAdapter.ViewHolder>() {
+        private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            return ViewHolder(
+                ItemFeedbackBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+        }
+
+        @SuppressLint("SetTextI18n")
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(feedbackList[position], position)
+            holder.itemView.setOnClickListener {
+
+            }
+        }
+
+        override fun getItemCount(): Int {
+            return feedbackList.size.coerceAtMost(5)
+        }
+
+        inner class ViewHolder(val binding: ItemFeedbackBinding) :
+            RecyclerView.ViewHolder(binding.root) {
+            @SuppressLint("SetTextI18n")
+            fun bind(item: FeedBack, position: Int) {
+                val calendar = Calendar.getInstance()
+                val time: Long = calendar.timeInMillis
+                val date = format.format(time)
+                try {
+                    val b: Date = format.parse(date)
+                    val txtTime = DateUtils.getRelativeTimeSpanString(
+                        item.time.toLong(),
+                        b.time,
+                        DateUtils.MINUTE_IN_MILLIS * 1,
+                        DateUtils.FORMAT_ABBREV_RELATIVE
+                    )
+                    binding.tvTime.text = txtTime
+                    binding.tvContent.text = item.textUser
+                    binding.tvShowFeedback.text = "Hiển thị tất cả ${feedbackList.size} đánh giá"
+                    binding.tvShowFeedback.paintFlags =
+                        binding.tvShowFeedback.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+                } catch (e: ParseException) {
+                    e.printStackTrace()
+                }
+
+                val sao = item.sao
+                val starImages = arrayOf(
+                    binding.imgStar1,
+                    binding.imgStar2,
+                    binding.imgStar3,
+                    binding.imgStar4,
+                    binding.imgStar5
+                )
+
+                for (i in starImages.indices) {
+                    if (i < sao) {
+                        starImages[i].setImageResource(R.drawable.ic_star_click)
+                    } else {
+                        starImages[i].setImageResource(R.drawable.ic_star_no_click)
+                    }
+                }
+
+                binding.tvNameUser.text = item.name
+                loadImage(binding.imgUser.context, item.imgUser, binding.imgUser)
+
+                if (position == feedbackList.size - 1 && position != 0) {
+                    binding.tvShowFeedback.visibility = View.VISIBLE
+                    binding.lnDetail.visibility = View.GONE
+                    binding.lnSao.visibility = View.GONE
+                    binding.tvContent.visibility = View.GONE
+                }
+                if (position == 4) {
+                    if (feedbackList.size - 5 == 0) {
+                        binding.tvShowFeedback.visibility = View.VISIBLE
+                    } else {
+                        binding.tvShowFeedback.visibility = View.VISIBLE
+                        binding.lnDetail.visibility = View.GONE
+                        binding.lnSao.visibility = View.GONE
+                        binding.tvContent.visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+
+    inner class RoomHotelAdapter(private val roomList: List<Room>) :
+        RecyclerView.Adapter<RoomHotelAdapter.ViewHolder>() {
+        private val fm = DecimalFormat("#,###")
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            return ViewHolder(
+                ItemRoomHotelBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+        }
+
+        @SuppressLint("SetTextI18n")
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(roomList[position])
+            holder.itemView.setOnClickListener {
+
+            }
+        }
+
+        override fun getItemCount(): Int {
+            return roomList.size
+        }
+
+        inner class ViewHolder(val binding: ItemRoomHotelBinding) :
+            RecyclerView.ViewHolder(binding.root) {
+            @SuppressLint("SetTextI18n")
+            fun bind(item: Room) {
+                val imageAutoAdapter = ImageAutoSliderAdapter(item.images)
+                binding.imageItem.setSliderAdapter(imageAutoAdapter)
+                binding.imageItem.setIndicatorAnimation(IndicatorAnimationType.THIN_WORM)
+
+                binding.imageItem.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+                binding.imageItem.autoCycleDirection =
+                    SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH
+                binding.imageItem.indicatorSelectedColor = Color.WHITE
+                binding.imageItem.indicatorUnselectedColor = Color.GRAY
+                binding.imageItem.scrollTimeInSec = 4
+                binding.imageItem.startAutoCycle()
+
+                binding.tvTenPhong.text = item.name
+                binding.tvAmountBedRoom.text =
+                    "${item.maxNguoiLon} người lớn, ${item.maxTreEm} trẻ em"
+                binding.tvArea.text = "${item.dienTich} m²"
+                binding.tvCountBathroom.text = item.bedroom[0].name
+                binding.price.text = fm.format(item.price)
+            }
+        }
+    }
+
+    inner class ImageAutoSliderAdapter(private val listImage: List<String>) :
+        SliderViewAdapter<ImageAutoSliderAdapter.Holder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup): Holder {
+            val view =
+                LayoutInflater.from(parent.context).inflate(R.layout.slider_item, parent, false)
+            return Holder(view)
+        }
+
+        override fun onBindViewHolder(viewHolder: Holder, position: Int) {
+            loadImage(viewHolder.imageView.context, listImage[position], viewHolder.imageView)
+        }
+
+        override fun getCount(): Int {
+            return listImage.size
+        }
+
+        inner class Holder(itemView: View) : ViewHolder(itemView) {
+            val imageView: ImageView = itemView.findViewById(R.id.image_view)
         }
     }
 

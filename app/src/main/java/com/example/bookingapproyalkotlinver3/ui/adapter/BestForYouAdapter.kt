@@ -6,12 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.example.bookingapproyalkotlinver3.R
 import com.example.bookingapproyalkotlinver3.constant.loadImage
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Hotel
-import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
 import com.example.bookingapproyalkotlinver3.databinding.ItemBestforyouHomefragmentBinding
 
 class BestForYouAdapter : RecyclerView.Adapter<BestForYouAdapter.ViewHolder>() {
@@ -28,8 +24,7 @@ class BestForYouAdapter : RecyclerView.Adapter<BestForYouAdapter.ViewHolder>() {
     val differ = AsyncListDiffer(this, callback)
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): BestForYouAdapter.ViewHolder {
         val binding = ItemBestforyouHomefragmentBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -46,7 +41,7 @@ class BestForYouAdapter : RecyclerView.Adapter<BestForYouAdapter.ViewHolder>() {
             loadImage(binding.icon1.context, item.convenient[0].iconImage, binding.icon1)
             loadImage(binding.icon2.context, item.convenient[1].iconImage, binding.icon2)
 
-            binding.tvNameHouseItemBestforyou.text= item.name
+            binding.tvNameHouseItemBestforyou.text = item.name
             binding.tvPriceHouseItemBestforyou.text = item.giaDaoDong
 
             binding.nameIcon1.text = item.convenient[0].name

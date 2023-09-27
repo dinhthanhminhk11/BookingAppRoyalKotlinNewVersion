@@ -9,6 +9,7 @@
     tools:context=".ui.fragment.DetailHotelFragment">
 
     <ScrollView
+        android:visibility="gone"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -305,7 +306,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvConvenient"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_230dp"
                     android:orientation="vertical"
                     android:overScrollMode="never" />
 
@@ -399,7 +400,6 @@
                         android:id="@+id/imgStar2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:src="@drawable/ic_star_1" />
 
                     <TextView
@@ -437,7 +437,6 @@
                     android:id="@+id/rcvFeedback"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:overScrollMode="never"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
             </LinearLayout>

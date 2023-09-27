@@ -2,6 +2,7 @@ package com.example.bookingapproyalkotlinver3.data.api
 
 import com.example.bookingapproyalkotlinver3.data.model.TextResponse
 import com.example.bookingapproyalkotlinver3.data.model.bookmark.BookmarkResponse
+import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
@@ -41,4 +42,12 @@ interface APIService {
 
     @GET("getHotelById/{id}")
     suspend fun getHotelById(@Path("id") id: String): Response<HotelById>
+
+    @GET("listFeedBack/{idHouse}")
+    suspend fun getFeedBack(@Path("idHouse") idHouse: String): Response<DataFeedBack>
+
+    @GET("getBookmarkByIdUserAndIdHouse/{id}/{idHotel}")
+    suspend fun getBookmarkByIdUserAndIdHouse(
+        @Path("id") idUser: String, @Path("idHotel") idHotel: String
+    ): Response<BookmarkResponse>
 }
