@@ -52,12 +52,23 @@
             app:exitAnim="@anim/fragment_slide_left_exit"
             app:popEnterAnim="@anim/slide_in"
             app:popExitAnim="@anim/fragment_slide_left_exit" />
+        <action
+            android:id="@+id/action_kingMainFragment_to_nearByFromYouFragment"
+            app:destination="@id/nearByFromYouFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailHotelFragment"
         android:name="com.example.bookingapproyalkotlinver3.ui.fragment.DetailHotelFragment"
         android:label="fragment_detail_hotel_activity"
-        tools:layout="@layout/fragment_detail_hotel_activity" />
+        tools:layout="@layout/fragment_detail_hotel_activity">
+        <action
+            android:id="@+id/action_detailHotelFragment_to_detailImageHotelFragment"
+            app:destination="@id/detailImageHotelFragment"
+            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:exitAnim="@anim/fragment_slide_left_exit"
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.bookingapproyalkotlinver3.ui.fragment.user.LoginFragment"
@@ -99,4 +110,27 @@
         android:name="com.example.bookingapproyalkotlinver3.ui.fragment.setting.NotificationFragment"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/detailImageHotelFragment"
+        android:name="com.example.bookingapproyalkotlinver3.ui.fragment.home.DetailImageHotelFragment"
+        android:label="fragment_detail_image_hotel"
+        tools:layout="@layout/fragment_detail_image_hotel">
+        <action
+            android:id="@+id/action_detailImageHotelFragment_to_detailGalleryFragment"
+            app:destination="@id/detailGalleryFragment"
+            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:exitAnim="@anim/fragment_slide_left_exit"
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailGalleryFragment"
+        android:name="com.example.bookingapproyalkotlinver3.ui.fragment.home.DetailGalleryFragment"
+        android:label="fragment_detail_gallery"
+        tools:layout="@layout/fragment_detail_gallery" />
+    <fragment
+        android:id="@+id/nearByFromYouFragment"
+        android:name="com.example.bookingapproyalkotlinver3.ui.fragment.home.NearByFromYouFragment"
+        android:label="fragment_near_by_from_you"
+        tools:layout="@layout/fragment_near_by_from_you" />
 </navigation>

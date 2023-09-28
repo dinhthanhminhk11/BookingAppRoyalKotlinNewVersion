@@ -93,7 +93,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         nearFromYouAdapter.setOnItemClickListener { hotel, position ->
             val bundle = Bundle().apply {
                 putSerializable(AppConstant.HOTEL_EXTRA, hotel._id)
-                Log.e("Minh" ,hotel._id)
+                Log.e("Minh", hotel._id)
             }
             findNavController().navigate(
                 R.id.action_kingMainFragment_to_detailHotelFragment, bundle
@@ -182,7 +182,8 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
 
     }
 
-    override fun initData() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (checkLocationPermission()) {
             viewModel.getCurrentLocation(requireActivity())
         } else {
@@ -190,6 +191,10 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         }
 
         viewModel.getAllListHotel()
+    }
+
+    override fun initData() {
+
     }
 
     override fun onRequestPermissionsResult(
@@ -374,8 +379,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                     }
                 }
                 binding.contentPerson.setOnClickListener {
-                    val bottomSheetPersonHome = BottomSheetPersonHome(
-                        requireActivity(),
+                    val bottomSheetPersonHome = BottomSheetPersonHome(requireActivity(),
                         object : BottomSheetPersonHome.Callback {
                             override fun onCLickSum(
                                 person: Int, children: Int, room: Int, age: Int
@@ -476,6 +480,10 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                         nearFromYouAdapter
                     }
                 }.scrollToPosition(positionListNearFrom)
+
+                binding.seeMoreNearFromYouHomeFragment.setOnClickListener {
+                    findNavController().navigate(R.id.action_kingMainFragment_to_nearByFromYouFragment)
+                }
             }
         }
 

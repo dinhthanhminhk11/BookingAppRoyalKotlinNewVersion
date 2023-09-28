@@ -41,6 +41,8 @@ object AppConstant {
 
     const val HOTEL_EXTRA = "HOTEL_EXTRA"
     const val TOKEN_USER = "TOKEN_USER"
+    const val GALLERY_LIST = "galleryList"
+    const val POSITION_GALLERY = "POSITION_GALLERY"
 }
 
 fun TextView.setUnderlinedText(text: CharSequence) {

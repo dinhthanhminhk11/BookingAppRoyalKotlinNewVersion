@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Paint
+import android.os.Bundle
 import android.os.Handler
 import android.text.format.DateUtils
 import android.view.LayoutInflater
@@ -119,7 +120,7 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
                 positionScroll + positionScroll2 + positionScroll3 + positionScroll4 + positionScroll5 + positionScroll6 + positionScroll7 + positionScroll8 + positionScroll9 + positionScroll10
 
             binding.scrollView.post {
-                binding.scrollView.scrollTo(0, sum)
+                binding.scrollView.smoothScrollTo(0, sum)
             }
         }
     }
@@ -279,6 +280,7 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
     override fun initData() {
         idHotel = arguments?.getString(AppConstant.HOTEL_EXTRA, "").toString()
         arguments?.let {
+            idHotel = it.getString(AppConstant.HOTEL_EXTRA, "")
             viewModel.getHotelById(it.getString(AppConstant.HOTEL_EXTRA, ""))
         }
     }
@@ -305,7 +307,12 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.bind(galleryList[position], position)
             holder.itemView.setOnClickListener {
-
+                val bundle = Bundle()
+                bundle.putStringArrayList(AppConstant.GALLERY_LIST, ArrayList(galleryList))
+                findNavController().navigate(
+                    R.id.action_detailHotelFragment_to_detailImageHotelFragment,
+                    bundle
+                )
             }
         }
 
@@ -344,9 +351,6 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
         @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.bind(convenientList[position], position)
-            holder.itemView.setOnClickListener {
-
-            }
         }
 
         override fun getItemCount(): Int {
