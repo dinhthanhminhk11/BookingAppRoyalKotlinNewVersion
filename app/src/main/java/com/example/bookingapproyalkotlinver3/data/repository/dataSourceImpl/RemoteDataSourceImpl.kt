@@ -3,6 +3,7 @@ package com.example.bookingapproyalkotlinver3.data.repository.dataSourceImpl
 import com.example.bookingapproyalkotlinver3.data.api.APIService
 import com.example.bookingapproyalkotlinver3.data.model.TextResponse
 import com.example.bookingapproyalkotlinver3.data.model.bookmark.BookmarkResponse
+import com.example.bookingapproyalkotlinver3.data.model.bookmark.PostIDUserAndIdHouse
 import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
@@ -44,4 +45,12 @@ class RemoteDataSourceImpl(private val apiService: APIService) : RemoteDataSourc
         idUser: String,
         idHotel: String
     ): Response<BookmarkResponse> = apiService.getBookmarkByIdUserAndIdHouse(idUser, idHotel)
+
+    override suspend fun addBookmark(postIDUserAndIdHouse: PostIDUserAndIdHouse): Response<BookmarkResponse> =
+        apiService.addBookmark(postIDUserAndIdHouse)
+
+    override suspend fun deleteBookmark(
+        idUser: String,
+        idHotel: String
+    ): Response<BookmarkResponse> = apiService.deleteBookmark(idUser, idHotel)
 }

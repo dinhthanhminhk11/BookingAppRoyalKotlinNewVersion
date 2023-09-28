@@ -18,6 +18,7 @@ import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.constant.MySharedPreferences
 import com.example.bookingapproyalkotlinver3.constant.loadImage
 import com.example.bookingapproyalkotlinver3.constant.setUnderlinedText
+import com.example.bookingapproyalkotlinver3.data.model.bookmark.PostIDUserAndIdHouse
 import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
 import com.example.bookingapproyalkotlinver3.data.model.feedback.FeedBack
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Convenient
@@ -52,6 +53,7 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
     private lateinit var convenientAdapter: ConvenientAdapter
     private lateinit var roomHotelAdapter: RoomHotelAdapter
     private lateinit var feedbackAdapter: FeedbackAdapter
+    private var idHotel: String = ""
     override fun initView() {
         binding.back.setOnClickListener {
             findNavController().popBackStack()
@@ -68,8 +70,15 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
                 R.drawable.ic_baseline_bookmark_24_white_full
             } else {
                 R.drawable.ic_baseline_bookmark_border_24_menu_toolbar
+
             }
             binding.bookmark.setImageResource(iconResource)
+            val userId = UserClient.id.toString()
+            if (isClickSpeed) {
+                viewModel.addBookmark(PostIDUserAndIdHouse(userId, idHotel))
+            } else {
+                viewModel.deleteBookmark(userId, idHotel)
+            }
         }
 
         binding.btnRentNow.setOnClickListener {
@@ -142,14 +151,14 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
             when (it) {
                 is Resource.Success -> {
                     it.data?.let {
-                        if (it.data.size > 0) {
+                        if (it.data.isNotEmpty()) {
                             if (it.data[0].isCheck) {
                                 binding.bookmark.setImageResource(R.drawable.ic_baseline_bookmark_24_white_full)
-                                isClickSpeed = false
+                                isClickSpeed = true
                             }
                         } else {
                             binding.bookmark.setImageResource(R.drawable.ic_baseline_bookmark_border_24_menu_toolbar)
-                            isClickSpeed = true
+                            isClickSpeed = false
                         }
                     }
                 }
@@ -243,6 +252,7 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
     }
 
     override fun initData() {
+        idHotel = arguments?.getString(AppConstant.HOTEL_EXTRA, "").toString()
         arguments?.let {
             viewModel.getHotelById(it.getString(AppConstant.HOTEL_EXTRA, ""))
         }

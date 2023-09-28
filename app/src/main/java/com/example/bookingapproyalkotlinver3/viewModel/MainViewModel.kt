@@ -17,6 +17,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bookingapproyalkotlinver3.data.model.bookmark.BookmarkResponse
+import com.example.bookingapproyalkotlinver3.data.model.bookmark.PostIDUserAndIdHouse
 import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
@@ -181,12 +182,31 @@ class MainViewModel @Inject constructor(
             } else {
                 dataFeedBack.postValue(Resource.Error("Internet is not available"))
             }
-
         } catch (e: Exception) {
             dataFeedBack.postValue(Resource.Error(e.message.toString()))
         }
     }
 
+    fun addBookmark(postIDUserAndIdHouse: PostIDUserAndIdHouse) =
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                if (isNetworkAvailable(app)) {
+                    repository.addBookmark(postIDUserAndIdHouse)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+    fun deleteBookmark(idUser: String, idHotel: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            if (isNetworkAvailable(app)) {
+                repository.deleteBookmark(idUser, idHotel)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
     private fun isNetworkAvailable(context: Context?): Boolean {
         if (context == null) return false

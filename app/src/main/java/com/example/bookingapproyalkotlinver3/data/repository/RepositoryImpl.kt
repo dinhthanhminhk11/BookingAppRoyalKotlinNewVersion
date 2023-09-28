@@ -2,6 +2,7 @@ package com.example.bookingapproyalkotlinver3.data.repository
 
 import com.example.bookingapproyalkotlinver3.data.model.TextResponse
 import com.example.bookingapproyalkotlinver3.data.model.bookmark.BookmarkResponse
+import com.example.bookingapproyalkotlinver3.data.model.bookmark.PostIDUserAndIdHouse
 import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
@@ -51,6 +52,15 @@ class RepositoryImpl(
         idHotel: String
     ): Resource<BookmarkResponse> =
         responseToResource(remoteDataSource.getBookmarkByIdUserAndIdHouse(idUser, idHotel))
+
+    override suspend fun addBookmark(postIDUserAndIdHouse: PostIDUserAndIdHouse): Resource<BookmarkResponse> =
+        responseToResource(remoteDataSource.addBookmark(postIDUserAndIdHouse))
+
+    override suspend fun deleteBookmark(
+        idUser: String,
+        idHotel: String
+    ): Resource<BookmarkResponse> =
+        responseToResource(remoteDataSource.deleteBookmark(idUser, idHotel))
 
 
     private fun <T> responseToResource(response: Response<T>): Resource<T> {

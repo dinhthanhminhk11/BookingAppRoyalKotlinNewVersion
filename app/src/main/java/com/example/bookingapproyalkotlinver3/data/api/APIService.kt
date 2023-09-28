@@ -2,6 +2,7 @@ package com.example.bookingapproyalkotlinver3.data.api
 
 import com.example.bookingapproyalkotlinver3.data.model.TextResponse
 import com.example.bookingapproyalkotlinver3.data.model.bookmark.BookmarkResponse
+import com.example.bookingapproyalkotlinver3.data.model.bookmark.PostIDUserAndIdHouse
 import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
@@ -12,6 +13,7 @@ import com.example.bookingapproyalkotlinver3.data.model.user.LoginResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
@@ -49,5 +51,14 @@ interface APIService {
     @GET("getBookmarkByIdUserAndIdHouse/{id}/{idHotel}")
     suspend fun getBookmarkByIdUserAndIdHouse(
         @Path("id") idUser: String, @Path("idHotel") idHotel: String
+    ): Response<BookmarkResponse>
+
+    @POST("createBookmark")
+    suspend fun addBookmark(@Body postIDUserAndIdHouse: PostIDUserAndIdHouse): Response<BookmarkResponse>
+
+    @DELETE("deleteBookmark/{id}/{idHotel}")
+    suspend fun deleteBookmark(
+        @Path("id") idUser: String,
+        @Path("idHotel") idHotel: String
     ): Response<BookmarkResponse>
 }

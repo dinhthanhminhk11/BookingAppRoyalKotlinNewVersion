@@ -2,6 +2,7 @@ package com.example.bookingapproyalkotlinver3.data.repository
 
 import com.example.bookingapproyalkotlinver3.data.model.TextResponse
 import com.example.bookingapproyalkotlinver3.data.model.bookmark.BookmarkResponse
+import com.example.bookingapproyalkotlinver3.data.model.bookmark.PostIDUserAndIdHouse
 import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
@@ -12,6 +13,9 @@ import com.example.bookingapproyalkotlinver3.data.model.user.LoginResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
 import com.example.bookingapproyalkotlinver3.data.util.Resource
 import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface Repository {
     suspend fun getListHotelNearBy(locationNearByRequest: LocationNearByRequest): Resource<HotelResponseNearBy>
@@ -25,5 +29,11 @@ interface Repository {
     suspend fun getFeedBack(idHouse: String): Resource<DataFeedBack>
     suspend fun getBookmarkByIdUserAndIdHouse(
         idUser: String, idHotel: String
+    ): Resource<BookmarkResponse>
+
+    suspend fun addBookmark(postIDUserAndIdHouse: PostIDUserAndIdHouse): Resource<BookmarkResponse>
+    suspend fun deleteBookmark(
+        idUser: String,
+        idHotel: String
     ): Resource<BookmarkResponse>
 }

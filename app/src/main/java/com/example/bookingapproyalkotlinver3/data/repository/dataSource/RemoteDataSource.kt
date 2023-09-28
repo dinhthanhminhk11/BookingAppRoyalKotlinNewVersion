@@ -2,6 +2,7 @@ package com.example.bookingapproyalkotlinver3.data.repository.dataSource
 
 import com.example.bookingapproyalkotlinver3.data.model.TextResponse
 import com.example.bookingapproyalkotlinver3.data.model.bookmark.BookmarkResponse
+import com.example.bookingapproyalkotlinver3.data.model.bookmark.PostIDUserAndIdHouse
 import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
@@ -11,6 +12,8 @@ import com.example.bookingapproyalkotlinver3.data.model.notification.NotiRespons
 import com.example.bookingapproyalkotlinver3.data.model.user.LoginResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
 import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface RemoteDataSource {
@@ -24,6 +27,11 @@ interface RemoteDataSource {
     suspend fun getHotelById(id: String): Response<HotelById>
     suspend fun getFeedBack(idHouse: String): Response<DataFeedBack>
     suspend fun getBookmarkByIdUserAndIdHouse(
+        idUser: String, idHotel: String
+    ): Response<BookmarkResponse>
+
+    suspend fun addBookmark(postIDUserAndIdHouse: PostIDUserAndIdHouse): Response<BookmarkResponse>
+    suspend fun deleteBookmark(
         idUser: String, idHotel: String
     ): Response<BookmarkResponse>
 }
