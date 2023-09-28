@@ -39,13 +39,13 @@ class DetailGalleryFragment : BaseViewModelFragment<FragmentDetailGalleryBinding
         binding.viewPageGallery.apply {
             adapter = DetailGalleryAdapter(galleryList)
             clipToPadding = true
-            currentItem = position
         }
         binding.viewPageGallery.addItemDecoration(
             DividerItemDecoration(
                 requireActivity(), LinearLayoutManager.HORIZONTAL
             )
         )
+        binding.viewPageGallery. setCurrentItem(position, true)
 
         binding.viewPageGallery.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -68,11 +68,15 @@ class DetailGalleryFragment : BaseViewModelFragment<FragmentDetailGalleryBinding
 
     }
 
-    override fun initData() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         arguments?.let { bundle ->
             galleryList = bundle.getStringArrayList(AppConstant.GALLERY_LIST) ?: ArrayList()
             position = bundle.getInt(AppConstant.POSITION_GALLERY)
         }
+    }
+    override fun initData() {
+
     }
 
     override fun inflateBinding(

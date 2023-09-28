@@ -46,10 +46,14 @@ class DetailImageHotelFragment : BaseViewModelFragment<FragmentDetailImageHotelB
 
     }
 
-    override fun initData() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         arguments?.let { bundle ->
             galleryList = bundle.getStringArrayList(AppConstant.GALLERY_LIST) ?: ArrayList()
         }
+    }
+    override fun initData() {
+
     }
 
     override fun inflateBinding(
