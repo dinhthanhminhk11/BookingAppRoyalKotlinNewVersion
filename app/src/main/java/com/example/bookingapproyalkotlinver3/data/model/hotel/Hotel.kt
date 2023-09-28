@@ -1,6 +1,5 @@
 package com.example.bookingapproyalkotlinver3.data.model.hotel
 
-import android.location.Location
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 

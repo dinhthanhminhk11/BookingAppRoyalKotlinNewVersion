@@ -1,13 +1,18 @@
 package com.example.bookingapproyalkotlinver3.ui.fragment
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Paint
+import android.os.Handler
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +27,7 @@ import com.example.bookingapproyalkotlinver3.data.model.bookmark.PostIDUserAndId
 import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
 import com.example.bookingapproyalkotlinver3.data.model.feedback.FeedBack
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Convenient
+import com.example.bookingapproyalkotlinver3.data.model.hotel.Hotel
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Room
 import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
@@ -35,7 +41,16 @@ import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.IndicatorVi
 import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.SliderAnimations
 import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.SliderView
 import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.SliderViewAdapter
+import com.example.bookingapproyalkotlinver3.ui.fragment.home.HomeFragment.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 import java.text.ParseException
@@ -46,7 +61,8 @@ import java.util.Locale
 
 
 @AndroidEntryPoint
-class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBinding>() {
+class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBinding>(),
+    OnMapReadyCallback {
     private val viewModel: MainViewModel by viewModels()
     private var isClickSpeed: Boolean = false
     private lateinit var galleryAdapter: GalleryAdapter
@@ -54,7 +70,14 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
     private lateinit var roomHotelAdapter: RoomHotelAdapter
     private lateinit var feedbackAdapter: FeedbackAdapter
     private var idHotel: String = ""
+    private lateinit var mMap: GoogleMap
+    private var isMapReady = false
     override fun initView() {
+        val mapFragment = childFragmentManager.findFragmentById(R.id.mapinfo) as SupportMapFragment?
+        mapFragment?.getMapAsync { googleMap ->
+            mMap = googleMap
+            isMapReady = true
+        }
         binding.back.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -164,8 +187,7 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
                 }
 
                 is Resource.Loading -> {
-                    it.message?.let {
-                    }
+                    it.message?.let {}
                 }
 
                 is Resource.Error -> {
@@ -249,6 +271,9 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
         ) {
             viewModel.getBookmarkByIdUserAndIdHouse(UserClient.id.toString(), it.dataHotel._id)
         }
+        Handler().postDelayed({
+            showMakerAndText(it.dataHotel)
+        }, 1000)
     }
 
     override fun initData() {
@@ -493,6 +518,43 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
 
         inner class Holder(itemView: View) : ViewHolder(itemView) {
             val imageView: ImageView = itemView.findViewById(R.id.image_view)
+        }
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        isMapReady = true
+        if (ContextCompat.checkSelfPermission(
+                requireActivity().applicationContext, Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            mMap.isMyLocationEnabled = true
+        }
+    }
+
+    private fun showMakerAndText(hotel: Hotel) {
+        if (::mMap.isInitialized) {
+            val location = hotel.location.coordinates
+            val myLocation = LatLng(location[1], location[0])
+
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(myLocation, 13f)
+            mMap.animateCamera(cameraUpdate)
+
+            val cameraPosition =
+                CameraPosition.Builder().target(myLocation).zoom(90f).bearing(0f).tilt(40f).build()
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+            // Vẽ marker
+            val markerOptions = MarkerOptions().position(myLocation).title(hotel.name)
+                .snippet("${hotel.sonha}, ${hotel.xa}, ${hotel.huyen}, ${hotel.tinh}")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+            mMap.addMarker(markerOptions)!!
         }
     }
 
