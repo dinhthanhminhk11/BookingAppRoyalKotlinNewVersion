@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.bookingapproyalkotlinver3.R
 import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
+import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.constant.loadImage
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Hotel
 import com.example.bookingapproyalkotlinver3.data.util.Resource
@@ -158,8 +159,6 @@ class NearByFromYouFragment : BaseViewModelFragment<FragmentNearByFromYouBinding
         } else {
             requestLocationPermission()
         }
-
-
     }
 
     override fun onRequestPermissionsResult(
@@ -273,6 +272,14 @@ class NearByFromYouFragment : BaseViewModelFragment<FragmentNearByFromYouBinding
                 }
 
                 binding.price.text = item.giaDaoDong
+                binding.contentCard.setOnClickListener {
+                    val bundle = Bundle().apply {
+                        putSerializable(AppConstant.HOTEL_EXTRA, item._id)
+                    }
+                    findNavController().navigate(
+                        R.id.action_nearByFromYouFragment_to_detailHotelFragment, bundle
+                    )
+                }
             }
         }
     }

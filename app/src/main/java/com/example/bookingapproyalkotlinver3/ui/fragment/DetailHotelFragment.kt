@@ -278,7 +278,6 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
     }
 
     override fun initData() {
-        idHotel = arguments?.getString(AppConstant.HOTEL_EXTRA, "").toString()
         arguments?.let {
             idHotel = it.getString(AppConstant.HOTEL_EXTRA, "")
             viewModel.getHotelById(it.getString(AppConstant.HOTEL_EXTRA, ""))

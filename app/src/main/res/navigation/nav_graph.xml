@@ -136,5 +136,13 @@
         android:id="@+id/nearByFromYouFragment"
         android:name="com.example.bookingapproyalkotlinver3.ui.fragment.home.NearByFromYouFragment"
         android:label="fragment_near_by_from_you"
-        tools:layout="@layout/fragment_near_by_from_you" />
+        tools:layout="@layout/fragment_near_by_from_you" >
+        <action
+            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:exitAnim="@anim/fragment_slide_left_exit"
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit"
+            android:id="@+id/action_nearByFromYouFragment_to_detailHotelFragment"
+            app:destination="@id/detailHotelFragment" />
+    </fragment>
 </navigation>
