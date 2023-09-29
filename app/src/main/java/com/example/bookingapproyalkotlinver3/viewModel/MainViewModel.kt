@@ -54,6 +54,7 @@ class MainViewModel @Inject constructor(
     val bookmarkCheckHotelResponse: MutableLiveData<Resource<BookmarkResponse>> = MutableLiveData()
     val hotelResponse: MutableLiveData<Resource<HotelById>> = MutableLiveData()
     val dataFeedBack: MutableLiveData<Resource<DataFeedBack>> = MutableLiveData()
+    val locationYouSelfMutableLiveData: MutableLiveData<Location> = MutableLiveData()
     fun getListNearByHotel(locationNearByRequest: LocationNearByRequest) =
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -274,6 +275,7 @@ class MainViewModel @Inject constructor(
                         )
                     )
                     getAddress(context, locationYouSelf.latitude, locationYouSelf.longitude)
+                    locationYouSelfMutableLiveData.postValue(locationYouSelf)
                 }
             }
         }
@@ -297,7 +299,6 @@ class MainViewModel @Inject constructor(
                 add = "$add\n${obj.subThoroughfare}"
                 addressData.postValue(add)
                 ctyData.postValue(obj.adminArea)
-                Log.v("IGA", "Address$add")
             }
         } catch (e: IOException) {
             e.printStackTrace()

@@ -12,11 +12,11 @@
         tools:layout="@layout/fragment_king_main">
         <action
             android:id="@+id/action_kingMainFragment_to_detailHotelFragment"
-            app:destination="@id/detailHotelFragment"
-            app:enterAnim="@anim/fragment_slide_left_enter"
-            app:exitAnim="@anim/fragment_slide_left_exit"
-            app:popEnterAnim="@anim/fragment_slide_right_enter"
-            app:popExitAnim="@anim/fragment_slide_right_exit" />
+            app:destination="@id/detailHotelFragment" />
+        <!-- app:enterAnim="@anim/fragment_slide_left_enter"
+         app:exitAnim="@anim/fragment_slide_left_exit"
+         app:popEnterAnim="@anim/fragment_slide_right_enter"
+         app:popExitAnim="@anim/fragment_slide_right_exit" -->
         <action
             android:id="@+id/action_kingMainFragment_to_loginFragment"
             app:destination="@id/loginFragment"
@@ -48,11 +48,15 @@
         <action
             android:id="@+id/action_kingMainFragment_to_notificationFragment"
             app:destination="@id/notificationFragment"
-            app:enterAnim="@anim/slide_in"
+            app:enterAnim="@anim/fragment_slide_left_enter"
             app:exitAnim="@anim/fragment_slide_left_exit"
-            app:popEnterAnim="@anim/slide_in"
-            app:popExitAnim="@anim/fragment_slide_left_exit" />
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit" />
         <action
+            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:exitAnim="@anim/fragment_slide_left_exit"
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit"
             android:id="@+id/action_kingMainFragment_to_nearByFromYouFragment"
             app:destination="@id/nearByFromYouFragment" />
     </fragment>

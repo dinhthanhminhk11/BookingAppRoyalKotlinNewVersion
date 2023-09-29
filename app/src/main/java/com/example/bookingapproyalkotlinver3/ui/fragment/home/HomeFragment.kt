@@ -217,19 +217,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         }
     }
 
-    private fun checkLocationPermission(): Boolean {
-        val permissionResult = ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        return permissionResult == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestLocationPermission() {
-        requestPermissions(
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            Companion.LOCATION_PERMISSION_REQUEST_CODE
-        )
-    }
 
     private fun handlePermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray

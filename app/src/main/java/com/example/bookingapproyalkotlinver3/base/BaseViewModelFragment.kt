@@ -1,5 +1,7 @@
 package com.example.bookingapproyalkotlinver3.base
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.ui.customview.mutilfragment.Slidr
+import com.example.bookingapproyalkotlinver3.ui.fragment.home.HomeFragment
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseViewModelFragment<Binding : ViewBinding> : BaseFragment<Binding>() {
@@ -53,7 +56,21 @@ abstract class BaseViewModelFragment<Binding : ViewBinding> : BaseFragment<Bindi
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
     }
 
-    fun onBackCustom(){
+    fun onBackCustom() {
         Slidr.attach(requireActivity())
+    }
+
+    fun checkLocationPermission(): Boolean {
+        val permissionResult = ContextCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        return permissionResult == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun requestLocationPermission() {
+        requestPermissions(
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            HomeFragment.LOCATION_PERMISSION_REQUEST_CODE
+        )
     }
 }
