@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_discover"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/search_selection"
         android:title="Khám phá" />
     <item
         android:id="@+id/navigation_favorites"
-        android:icon="@drawable/round_bookmark_border_24"
+        android:icon="@drawable/bookmark_selection"
         android:title="Danh sách yêu thích" />
     <item
         android:id="@+id/navigation_trips"
-        android:icon="@drawable/baseline_card_travel_24"
+        android:icon="@drawable/trips_selection"
         android:title="Chuyến đi" />
     <item
         android:id="@+id/navigation_inbox"
-        android:icon="@drawable/outline_message_24"
+        android:icon="@drawable/message_selection"
         android:title="Hộp thư" />
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/round_person_24"
+        android:icon="@drawable/person_selection"
         android:title="Hồ sơ" />
 </menu>

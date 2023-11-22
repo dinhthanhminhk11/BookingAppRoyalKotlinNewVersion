@@ -1,6 +1,7 @@
 package com.example.bookingapproyalkotlinver3.ui.fragment.setting
 
 import android.annotation.SuppressLint
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,18 +12,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookingapproyalkotlinver3.R
-import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
-import com.example.bookingapproyalkotlinver3.constant.loadImage
+import com.example.bookingapproyalkotlinver3.base.BaseFragment
+import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.data.model.notification.Notification
 import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
 import com.example.bookingapproyalkotlinver3.data.util.Resource
+import com.example.bookingapproyalkotlinver3.data.util.view.loadImage
 import com.example.bookingapproyalkotlinver3.databinding.FragmentNotificationBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemLayoutNotificationBinding
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>() {
+class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentNotificationBinding::inflate) {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var notificationAdapter: NotificationAdapter
     override fun initView() {
@@ -86,12 +88,11 @@ class NotificationFragment : BaseViewModelFragment<FragmentNotificationBinding>(
 
     override fun onResume() {
         super.onResume()
-        viewModel.getListNotification(UserClient.id.toString())
-    }
+        Handler().postDelayed({
+            viewModel.getListNotification(UserClient.id.toString())
+        }, 100)
 
-    override fun inflateBinding(
-        inflater: LayoutInflater, container: ViewGroup?
-    ): FragmentNotificationBinding = FragmentNotificationBinding.inflate(inflater, container, false)
+    }
 
     inner class NotificationAdapter(
         private val onItemClickListener: (Notification) -> Unit

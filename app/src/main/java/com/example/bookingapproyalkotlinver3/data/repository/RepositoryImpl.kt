@@ -14,6 +14,7 @@ import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
 import com.example.bookingapproyalkotlinver3.data.repository.dataSource.LocalDataSource
 import com.example.bookingapproyalkotlinver3.data.repository.dataSource.RemoteDataSource
 import com.example.bookingapproyalkotlinver3.data.util.Resource
+import com.example.bookingapproyalkotlinver3.data.util.view.responseToResource
 import retrofit2.Response
 
 class RepositoryImpl(
@@ -61,14 +62,4 @@ class RepositoryImpl(
         idHotel: String
     ): Resource<BookmarkResponse> =
         responseToResource(remoteDataSource.deleteBookmark(idUser, idHotel))
-
-
-    private fun <T> responseToResource(response: Response<T>): Resource<T> {
-        if (response.isSuccessful) {
-            response.body()?.let {
-                return Resource.Success(it)
-            }
-        }
-        return Resource.Error(response.message())
-    }
 }

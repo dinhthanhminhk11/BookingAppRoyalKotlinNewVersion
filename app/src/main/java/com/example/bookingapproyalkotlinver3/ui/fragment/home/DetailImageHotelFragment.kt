@@ -8,15 +8,14 @@ import android.widget.ImageView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.bookingapproyalkotlinver3.R
-import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
+import com.example.bookingapproyalkotlinver3.base.BaseFragment
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
-import com.example.bookingapproyalkotlinver3.constant.loadImage
+import com.example.bookingapproyalkotlinver3.data.util.view.loadImage
 import com.example.bookingapproyalkotlinver3.databinding.FragmentDetailImageHotelBinding
 
-class DetailImageHotelFragment : BaseViewModelFragment<FragmentDetailImageHotelBinding>() {
+class DetailImageHotelFragment :
+    BaseFragment<FragmentDetailImageHotelBinding>(FragmentDetailImageHotelBinding::inflate) {
     private var galleryList: ArrayList<String> = ArrayList()
     override fun initView() {
         binding.toolBar.title = getString(R.string.Gallery)
@@ -52,16 +51,10 @@ class DetailImageHotelFragment : BaseViewModelFragment<FragmentDetailImageHotelB
             galleryList = bundle.getStringArrayList(AppConstant.GALLERY_LIST) ?: ArrayList()
         }
     }
+
     override fun initData() {
 
     }
-
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentDetailImageHotelBinding =
-        FragmentDetailImageHotelBinding.inflate(inflater, container, false)
-
 
     inner class GalleryImageAdapter(private val image: ArrayList<String>) :
         RecyclerView.Adapter<GalleryImageAdapter.MyViewHolder>() {

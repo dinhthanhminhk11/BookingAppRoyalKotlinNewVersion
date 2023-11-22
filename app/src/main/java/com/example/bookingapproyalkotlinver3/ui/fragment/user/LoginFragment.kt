@@ -6,21 +6,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.bookingapproyalkotlinver3.R
-import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
+import com.example.bookingapproyalkotlinver3.base.BaseFragment
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.constant.MySharedPreferences
-import com.example.bookingapproyalkotlinver3.constant.isValidEmail
-import com.example.bookingapproyalkotlinver3.constant.setUnderlinedText
 import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
 import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
 import com.example.bookingapproyalkotlinver3.data.util.Resource
+import com.example.bookingapproyalkotlinver3.data.util.view.isValidEmail
+import com.example.bookingapproyalkotlinver3.data.util.view.setUnderlinedText
 import com.example.bookingapproyalkotlinver3.databinding.FragmentLoginBinding
 import com.example.bookingapproyalkotlinver3.ui.customview.toast.CookieBar
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginFragment : BaseViewModelFragment<FragmentLoginBinding>() {
+class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
     private val viewModel: MainViewModel by viewModels()
 
     override fun initView() {
@@ -110,11 +110,6 @@ class LoginFragment : BaseViewModelFragment<FragmentLoginBinding>() {
 
     override fun initData() {
     }
-
-    override fun inflateBinding(
-        inflater: LayoutInflater, container: ViewGroup?
-    ): FragmentLoginBinding = FragmentLoginBinding.inflate(inflater, container, false)
-
 
     private fun isLoaded(checkLoad: Boolean) {
         if (checkLoad) {

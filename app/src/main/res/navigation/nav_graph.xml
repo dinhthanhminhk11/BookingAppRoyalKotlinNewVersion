@@ -12,11 +12,11 @@
         tools:layout="@layout/fragment_king_main">
         <action
             android:id="@+id/action_kingMainFragment_to_detailHotelFragment"
-            app:destination="@id/detailHotelFragment" />
-        <!-- app:enterAnim="@anim/fragment_slide_left_enter"
-         app:exitAnim="@anim/fragment_slide_left_exit"
-         app:popEnterAnim="@anim/fragment_slide_right_enter"
-         app:popExitAnim="@anim/fragment_slide_right_exit" -->
+            app:destination="@id/detailHotelFragment"
+            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:exitAnim="@anim/fragment_slide_left_exit"
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit" />
         <action
             android:id="@+id/action_kingMainFragment_to_loginFragment"
             app:destination="@id/loginFragment"
@@ -53,12 +53,12 @@
             app:popEnterAnim="@anim/fragment_slide_right_enter"
             app:popExitAnim="@anim/fragment_slide_right_exit" />
         <action
+            android:id="@+id/action_kingMainFragment_to_nearByFromYouFragment"
+            app:destination="@id/nearByFromYouFragment"
             app:enterAnim="@anim/fragment_slide_left_enter"
             app:exitAnim="@anim/fragment_slide_left_exit"
             app:popEnterAnim="@anim/fragment_slide_right_enter"
-            app:popExitAnim="@anim/fragment_slide_right_exit"
-            android:id="@+id/action_kingMainFragment_to_nearByFromYouFragment"
-            app:destination="@id/nearByFromYouFragment" />
+            app:popExitAnim="@anim/fragment_slide_right_exit" />
     </fragment>
     <fragment
         android:id="@+id/detailHotelFragment"
@@ -136,13 +136,13 @@
         android:id="@+id/nearByFromYouFragment"
         android:name="com.example.bookingapproyalkotlinver3.ui.fragment.home.NearByFromYouFragment"
         android:label="fragment_near_by_from_you"
-        tools:layout="@layout/fragment_near_by_from_you" >
+        tools:layout="@layout/fragment_near_by_from_you">
         <action
+            android:id="@+id/action_nearByFromYouFragment_to_detailHotelFragment"
+            app:destination="@id/detailHotelFragment"
             app:enterAnim="@anim/fragment_slide_left_enter"
             app:exitAnim="@anim/fragment_slide_left_exit"
             app:popEnterAnim="@anim/fragment_slide_right_enter"
-            app:popExitAnim="@anim/fragment_slide_right_exit"
-            android:id="@+id/action_nearByFromYouFragment_to_detailHotelFragment"
-            app:destination="@id/detailHotelFragment" />
+            app:popExitAnim="@anim/fragment_slide_right_exit" />
     </fragment>
 </navigation>

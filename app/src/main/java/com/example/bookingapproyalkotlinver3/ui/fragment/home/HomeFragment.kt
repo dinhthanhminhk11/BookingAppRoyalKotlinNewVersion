@@ -1,6 +1,5 @@
 package com.example.bookingapproyalkotlinver3.ui.fragment.home
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -9,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -18,11 +16,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookingapproyalkotlinver3.R
-import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
+import com.example.bookingapproyalkotlinver3.base.BaseFragment
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.constant.MySharedPreferences
-import com.example.bookingapproyalkotlinver3.constant.setUnderlinedText
 import com.example.bookingapproyalkotlinver3.data.util.Resource
+import com.example.bookingapproyalkotlinver3.data.util.view.checkLocationPermission
+import com.example.bookingapproyalkotlinver3.data.util.view.requestLocationPermission
+import com.example.bookingapproyalkotlinver3.data.util.view.setUnderlinedText
 import com.example.bookingapproyalkotlinver3.databinding.BetweenViewHomeBinding
 import com.example.bookingapproyalkotlinver3.databinding.BottomViewHomeBinding
 import com.example.bookingapproyalkotlinver3.databinding.FragmentHomeBinding
@@ -45,7 +45,7 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
     private val viewModel: MainViewModel by viewModels()
     private var currentTimeNow: Date? = null
     private var currentTimeTomorrow: Date? = null
@@ -137,9 +137,9 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
         viewModel.resourceMutableLiveDataHotelNearBy.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    it.data?.let { it ->
+                    it.data?.let {hotelResponse ->
                         isDataLoaded = false
-                        nearFromYouAdapter.differ.submitList(it.data.toList())
+                        nearFromYouAdapter.differ.submitList(hotelResponse.data.toList())
                         homeViewAdapter.notifyDataSetChanged()
                     }
                 }
@@ -182,12 +182,13 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
 
     }
 
+    @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (checkLocationPermission()) {
+        if (checkLocationPermission(activity!!)) {
             viewModel.getCurrentLocation(requireActivity())
         } else {
-            requestLocationPermission()
+            requestLocationPermission(activity!!)
         }
 
         viewModel.getAllListHotel()
@@ -197,15 +198,12 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
         handlePermissionsResult(requestCode, permissions, grantResults)
     }
-
-    override fun inflateBinding(
-        inflater: LayoutInflater, container: ViewGroup?
-    ): FragmentHomeBinding = FragmentHomeBinding.inflate(inflater, container, false)
 
     private fun initRecyclerView() {
         nearFromYouAdapter = NearFromYouAdapter()
@@ -299,31 +297,32 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
 
         inner class TopViewHolder(val binding: TopViewHomeBinding) :
             RecyclerView.ViewHolder(binding.root) {
+            @SuppressLint("SetTextI18n")
             fun bind() {
                 initDate()
                 initPerson()
                 binding.contentDate.setOnClickListener {
-                    if (!materialDatePicker!!.isAdded) {
-                        materialDatePicker!!.show(
+                    if (!materialDatePicker.isAdded) {
+                        materialDatePicker.show(
                             requireActivity().supportFragmentManager, "DATE_PICKER"
                         )
                     }
 
-                    materialDatePicker!!.lifecycle.addObserver(object : DefaultLifecycleObserver {
+                    materialDatePicker.lifecycle.addObserver(object : DefaultLifecycleObserver {
                         override fun onCreate(owner: LifecycleOwner) {}
 
                         override fun onStart(owner: LifecycleOwner) {
-                            val root: View = materialDatePicker!!.requireView()
+                            val root: View = materialDatePicker.requireView()
                         }
 
                         override fun onResume(owner: LifecycleOwner) {}
 
                         override fun onDestroy(owner: LifecycleOwner) {
-                            materialDatePicker!!.lifecycle.removeObserver(this)
+                            materialDatePicker.lifecycle.removeObserver(this)
                         }
                     })
 
-                    materialDatePicker!!.addOnPositiveButtonClickListener { selection ->
+                    materialDatePicker.addOnPositiveButtonClickListener { selection ->
                         val startDate: Long? = selection.first
                         val endDate: Long? = selection.second
 
@@ -368,17 +367,18 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                 binding.contentPerson.setOnClickListener {
                     val bottomSheetPersonHome = BottomSheetPersonHome(requireActivity(),
                         object : BottomSheetPersonHome.Callback {
+                            @SuppressLint("SetTextI18n")
                             override fun onCLickSum(
-                                person: Int, children: Int, room: Int, age: Int
+                                person: Int, children: Int, countRoom: Int, age: Int
                             ) {
-                                binding.countRoom.text = "$room ${getString(R.string.Room)}"
+                                binding.countRoom.text = "$countRoom ${getString(R.string.Room)}"
                                 binding.countChildren.text =
                                     "$children ${getString(R.string.Children)}"
                                 binding.countPerson.text = "$person ${getString(R.string.Adult)}"
 
                                 countPerson = person;
                                 countChildren = children;
-                                countRoom = room;
+                                this@HomeFragment.countRoom = countRoom;
                                 ageChildren = age;
                             }
                         })
@@ -391,7 +391,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
             private fun initDate() {
                 binding.payDay.text = daysDiffPrivate.toString()
 
-                var calendar = Calendar.getInstance()
+                val calendar = Calendar.getInstance()
                 calendar.add(Calendar.DAY_OF_YEAR, 1)
                 currentTimeNow = Calendar.getInstance().time
                 currentTimeTomorrow = calendar.time
@@ -440,7 +440,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding>() {
                     .getInt(AppConstant.SHAREDPREFERENCES_USER_COUNT_CHILDREN, 2)
                 ageChildren = MySharedPreferences.getInstance(requireActivity())
                     .getInt(AppConstant.SHAREDPREFERENCES_USER_AGE_CHILDREN, 1)
-                var textSearch = MySharedPreferences.getInstance(requireActivity()).getString(
+                val textSearch = MySharedPreferences.getInstance(requireActivity()).getString(
                     AppConstant.SHAREDPREFERENCES_USER_TEXT_SEARCH,
                     getString(R.string.Nearest_Hotels)
                 )

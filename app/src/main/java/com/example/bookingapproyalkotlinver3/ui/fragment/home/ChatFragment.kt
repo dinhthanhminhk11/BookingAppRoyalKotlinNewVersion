@@ -2,10 +2,10 @@ package com.example.bookingapproyalkotlinver3.ui.fragment.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
+import com.example.bookingapproyalkotlinver3.base.BaseFragment
 import com.example.bookingapproyalkotlinver3.databinding.FragmentChatBinding
 
-class ChatFragment : BaseViewModelFragment<FragmentChatBinding>() {
+class ChatFragment : BaseFragment<FragmentChatBinding>(FragmentChatBinding::inflate) {
     override fun initView() {
     }
 
@@ -17,8 +17,4 @@ class ChatFragment : BaseViewModelFragment<FragmentChatBinding>() {
 
     override fun initData() {
     }
-
-    override fun inflateBinding(
-        inflater: LayoutInflater, container: ViewGroup?
-    ): FragmentChatBinding = FragmentChatBinding.inflate(inflater, container, false)
 }

@@ -9,13 +9,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookingapproyalkotlinver3.R
-import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
+import com.example.bookingapproyalkotlinver3.base.BaseFragment
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.constant.MySharedPreferences
-import com.example.bookingapproyalkotlinver3.constant.loadImage
-import com.example.bookingapproyalkotlinver3.constant.setUnderlinedText
 import com.example.bookingapproyalkotlinver3.data.model.SettingItem
 import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
+import com.example.bookingapproyalkotlinver3.data.util.view.loadImage
+import com.example.bookingapproyalkotlinver3.data.util.view.setUnderlinedText
 import com.example.bookingapproyalkotlinver3.databinding.FragmentProfileBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemSettingUserFragmentBinding
 import com.example.bookingapproyalkotlinver3.databinding.LayoutCheckLoginSettingBinding
@@ -23,7 +23,7 @@ import com.example.bookingapproyalkotlinver3.databinding.TitleTextViewBinding
 import com.example.bookingapproyalkotlinver3.ui.customview.toast.CookieBar
 import com.example.bookingapproyalkotlinver3.ui.dialog.DialogConfirmCustom
 
-class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding>() {
+class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
     private lateinit var adapterSetting: SettingAdapter
     val listSetting = mutableListOf<SettingItem>()
 
@@ -48,10 +48,6 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding>() {
 
     override fun initData() {
     }
-
-    override fun inflateBinding(
-        inflater: LayoutInflater, container: ViewGroup?
-    ): FragmentProfileBinding = FragmentProfileBinding.inflate(inflater, container, false)
 
     inner class SettingAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val DEFAULT_TYPE = 1

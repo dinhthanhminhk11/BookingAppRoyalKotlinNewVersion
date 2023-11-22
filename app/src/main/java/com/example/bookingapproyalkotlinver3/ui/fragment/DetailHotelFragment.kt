@@ -19,11 +19,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookingapproyalkotlinver3.R
-import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
+import com.example.bookingapproyalkotlinver3.base.BaseFragment
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.constant.MySharedPreferences
-import com.example.bookingapproyalkotlinver3.constant.loadImage
-import com.example.bookingapproyalkotlinver3.constant.setUnderlinedText
 import com.example.bookingapproyalkotlinver3.data.model.bookmark.PostIDUserAndIdHouse
 import com.example.bookingapproyalkotlinver3.data.model.feedback.DataFeedBack
 import com.example.bookingapproyalkotlinver3.data.model.feedback.FeedBack
@@ -33,6 +31,8 @@ import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Room
 import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
 import com.example.bookingapproyalkotlinver3.data.util.Resource
+import com.example.bookingapproyalkotlinver3.data.util.view.loadImage
+import com.example.bookingapproyalkotlinver3.data.util.view.setUnderlinedText
 import com.example.bookingapproyalkotlinver3.databinding.FragmentDetailHotelActivityBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemConvenientBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemFeedbackBinding
@@ -62,7 +62,8 @@ import java.util.Locale
 
 
 @AndroidEntryPoint
-class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBinding>(),
+class DetailHotelFragment :
+    BaseFragment<FragmentDetailHotelActivityBinding>(FragmentDetailHotelActivityBinding::inflate),
     OnMapReadyCallback {
     private val viewModel: MainViewModel by viewModels()
     private var isClickSpeed: Boolean = false
@@ -139,7 +140,7 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
                 is Resource.Loading -> {
                     it.message?.let {
                         binding.progressBar.visibility = View.VISIBLE
-                        showSnackbar(requireView(), it)
+//                        showSnackbar(requireView(), it)
                     }
                 }
 
@@ -161,7 +162,7 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
                 is Resource.Loading -> {
                     it.message?.let {
                         binding.progressBar.visibility = View.VISIBLE
-                        showSnackbar(requireView(), it)
+//                        showSnackbar(requireView(), it)
                     }
                 }
 
@@ -280,15 +281,11 @@ class DetailHotelFragment : BaseViewModelFragment<FragmentDetailHotelActivityBin
     override fun initData() {
         arguments?.let {
             idHotel = it.getString(AppConstant.HOTEL_EXTRA, "")
-            viewModel.getHotelById(it.getString(AppConstant.HOTEL_EXTRA, ""))
+            Handler().postDelayed({
+                viewModel.getHotelById(it.getString(AppConstant.HOTEL_EXTRA, ""))
+            }, 500)
         }
     }
-
-    override fun inflateBinding(
-        inflater: LayoutInflater, container: ViewGroup?
-    ): FragmentDetailHotelActivityBinding =
-        FragmentDetailHotelActivityBinding.inflate(inflater, container, false)
-
 
     inner class GalleryAdapter(
         private val galleryList: List<String>

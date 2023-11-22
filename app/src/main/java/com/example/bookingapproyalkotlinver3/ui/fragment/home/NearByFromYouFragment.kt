@@ -16,17 +16,16 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.bookingapproyalkotlinver3.R
-import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
+import com.example.bookingapproyalkotlinver3.base.BaseFragment
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
-import com.example.bookingapproyalkotlinver3.constant.loadImage
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Hotel
 import com.example.bookingapproyalkotlinver3.data.util.Resource
+import com.example.bookingapproyalkotlinver3.data.util.view.checkLocationPermission
+import com.example.bookingapproyalkotlinver3.data.util.view.loadImage
+import com.example.bookingapproyalkotlinver3.data.util.view.requestLocationPermission
 import com.example.bookingapproyalkotlinver3.databinding.FragmentNearByFromYouBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemNearFromYouMapBinding
-import com.example.bookingapproyalkotlinver3.ui.fragment.DetailHotelFragment
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -38,12 +37,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.ui.IconGenerator
 import dagger.hilt.android.AndroidEntryPoint
-import org.w3c.dom.Text
 import java.text.DecimalFormat
 
 
 @AndroidEntryPoint
-class NearByFromYouFragment : BaseViewModelFragment<FragmentNearByFromYouBinding>() {
+class NearByFromYouFragment :
+    BaseFragment<FragmentNearByFromYouBinding>(FragmentNearByFromYouBinding::inflate) {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var mMap: GoogleMap
     private lateinit var address: String
@@ -51,19 +50,13 @@ class NearByFromYouFragment : BaseViewModelFragment<FragmentNearByFromYouBinding
     private val TRANSPARENT_DRAWABLE = ColorDrawable(Color.TRANSPARENT)
     private lateinit var markerView: View
     private lateinit var priceTag: TextView
-    private lateinit var latLngLocationYourSelf : LatLng
+    private lateinit var latLngLocationYourSelf: LatLng
     private val callback = OnMapReadyCallback { googleMap ->
 //        val sydney = LatLng(-34.0, 151.0)
 //        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
 //        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         mMap = googleMap
     }
-
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentNearByFromYouBinding =
-        FragmentNearByFromYouBinding.inflate(inflater, container, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,11 +146,12 @@ class NearByFromYouFragment : BaseViewModelFragment<FragmentNearByFromYouBinding
         }
     }
 
+    @SuppressLint("UseRequireInsteadOfGet")
     override fun initData() {
-        if (checkLocationPermission()) {
+        if (checkLocationPermission(activity!!)) {
             viewModel.getCurrentLocation(requireActivity())
         } else {
-            requestLocationPermission()
+            requestLocationPermission(activity!!)
         }
     }
 
@@ -205,7 +199,13 @@ class NearByFromYouFragment : BaseViewModelFragment<FragmentNearByFromYouBinding
                 if (marker.position.latitude == latLngLocationYourSelf.latitude && marker.position.longitude == latLngLocationYourSelf.longitude) {
                     false
                 } else {
-                    binding.recyclerview.smoothScrollToPosition(Integer.parseInt(marker.id.substring(1)) - 1)
+                    binding.recyclerview.smoothScrollToPosition(
+                        Integer.parseInt(
+                            marker.id.substring(
+                                1
+                            )
+                        ) - 1
+                    )
                     false
                 }
             }

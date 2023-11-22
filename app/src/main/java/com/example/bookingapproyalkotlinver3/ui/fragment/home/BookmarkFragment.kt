@@ -3,30 +3,24 @@ package com.example.bookingapproyalkotlinver3.ui.fragment.home
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookingapproyalkotlinver3.R
-import com.example.bookingapproyalkotlinver3.base.BaseViewModelFragment
+import com.example.bookingapproyalkotlinver3.base.BaseFragment
 import com.example.bookingapproyalkotlinver3.constant.AppConstant
 import com.example.bookingapproyalkotlinver3.constant.MySharedPreferences
-import com.example.bookingapproyalkotlinver3.constant.loadImage
 import com.example.bookingapproyalkotlinver3.data.model.bookmark.Bookmark
-import com.example.bookingapproyalkotlinver3.data.model.notification.Notification
 import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
 import com.example.bookingapproyalkotlinver3.data.util.Resource
 import com.example.bookingapproyalkotlinver3.databinding.FragmentBookmarkBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemBookmarkByUserBinding
-import com.example.bookingapproyalkotlinver3.databinding.ItemLayoutNotificationBinding
-import com.example.bookingapproyalkotlinver3.ui.fragment.setting.NotificationFragment
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class BookmarkFragment : BaseViewModelFragment<FragmentBookmarkBinding>() {
+class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(FragmentBookmarkBinding::inflate) {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var bookmarkAdapter: BookmarkAdapter
     override fun initView() {
@@ -67,9 +61,6 @@ class BookmarkFragment : BaseViewModelFragment<FragmentBookmarkBinding>() {
         }
     }
 
-    override fun inflateBinding(
-        inflater: LayoutInflater, container: ViewGroup?
-    ): FragmentBookmarkBinding = FragmentBookmarkBinding.inflate(inflater, container, false)
 
     inner class BookmarkAdapter(
         private val onItemClickListener: (Bookmark) -> Unit

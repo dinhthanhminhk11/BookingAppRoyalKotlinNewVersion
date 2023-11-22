@@ -44,26 +44,3 @@ object AppConstant {
     const val GALLERY_LIST = "galleryList"
     const val POSITION_GALLERY = "POSITION_GALLERY"
 }
-
-fun TextView.setUnderlinedText(text: CharSequence) {
-    val spannableString = SpannableString(text)
-    spannableString.setSpan(UnderlineSpan(), 0, text.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-    this.text = spannableString
-}
-
-fun isValidEmail(email: String): Boolean {
-    val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
-    return email.matches(emailPattern.toRegex())
-}
-
-fun loadImage(context: Context, imageUrl: String?, imageView: ImageView) {
-    val options = RequestOptions()
-        .centerCrop()
-        .placeholder(R.drawable.imageloading)
-        .error(R.drawable.imageerror)
-
-    Glide.with(context)
-        .load(imageUrl)
-        .apply(options)
-        .into(imageView)
-}

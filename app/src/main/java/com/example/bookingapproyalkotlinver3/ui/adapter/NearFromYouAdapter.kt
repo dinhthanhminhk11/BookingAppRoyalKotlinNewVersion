@@ -1,18 +1,13 @@
 package com.example.bookingapproyalkotlinver3.ui.adapter
 
 import android.annotation.SuppressLint
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.example.bookingapproyalkotlinver3.R
-import com.example.bookingapproyalkotlinver3.constant.loadImage
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Hotel
+import com.example.bookingapproyalkotlinver3.data.util.view.loadImage
 import com.example.bookingapproyalkotlinver3.databinding.ItemNearfromyouHomefragmentBinding
 import java.text.DecimalFormat
 
@@ -52,7 +47,11 @@ class NearFromYouAdapter : RecyclerView.Adapter<NearFromYouAdapter.ViewHolder>()
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(item: Hotel, position: Int) {
-            loadImage(binding.imgItemNearFromYou.context, item.images[0], binding.imgItemNearFromYou)
+            loadImage(
+                binding.imgItemNearFromYou.context,
+                item.images[0],
+                binding.imgItemNearFromYou
+            )
 
             binding.tvAddressItemNearFromYou.text =
                 "${item.sonha}, ${item.xa}, ${item.huyen}, ${item.tinh}"

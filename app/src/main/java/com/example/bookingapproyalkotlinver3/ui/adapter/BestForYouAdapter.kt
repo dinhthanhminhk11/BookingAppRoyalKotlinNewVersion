@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookingapproyalkotlinver3.constant.loadImage
 import com.example.bookingapproyalkotlinver3.data.model.hotel.Hotel
+import com.example.bookingapproyalkotlinver3.data.util.view.loadImage
 import com.example.bookingapproyalkotlinver3.databinding.ItemBestforyouHomefragmentBinding
 
 class BestForYouAdapter : RecyclerView.Adapter<BestForYouAdapter.ViewHolder>() {
