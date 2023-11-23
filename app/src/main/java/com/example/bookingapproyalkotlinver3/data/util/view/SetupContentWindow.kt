@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.FragmentActivity
+import java.text.DecimalFormat
 
 fun setupContentWindow(activity: FragmentActivity) {
     activity.window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -12,3 +13,5 @@ fun setupContentWindow(activity: FragmentActivity) {
     activity.window.decorView.systemUiVisibility =
         View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 }
+
+val decimalFormat = DecimalFormat("#,###")

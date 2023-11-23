@@ -8,6 +8,7 @@ import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
+import com.example.bookingapproyalkotlinver3.data.model.hotel.Room
 import com.example.bookingapproyalkotlinver3.data.model.notification.NotiResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.LoginResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
@@ -62,4 +63,7 @@ class RepositoryImpl(
         idHotel: String
     ): Resource<BookmarkResponse> =
         responseToResource(remoteDataSource.deleteBookmark(idUser, idHotel))
+
+    override suspend fun getRoomById(id: String): Resource<Room> =
+        responseToResource(remoteDataSource.getRoomById(id))
 }

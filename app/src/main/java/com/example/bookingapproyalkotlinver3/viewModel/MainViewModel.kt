@@ -20,6 +20,7 @@ import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
+import com.example.bookingapproyalkotlinver3.data.model.hotel.Room
 import com.example.bookingapproyalkotlinver3.data.model.notification.NotiResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.LoginResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.UserClient
@@ -53,6 +54,7 @@ class MainViewModel @Inject constructor(
     val hotelResponse: MutableLiveData<Resource<HotelById>> = MutableLiveData()
     val dataFeedBack: MutableLiveData<Resource<DataFeedBack>> = MutableLiveData()
     val locationYouSelfMutableLiveData: MutableLiveData<Location> = MutableLiveData()
+    val roomResponseMutableLiveData: MutableLiveData<Resource<Room>> = MutableLiveData()
     fun getListNearByHotel(locationNearByRequest: LocationNearByRequest) =
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -204,6 +206,19 @@ class MainViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    fun getRoomById(idRoom: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            if (isNetworkAvailable(app)) {
+                val apiResult = repository.getRoomById(idRoom)
+                roomResponseMutableLiveData.postValue(apiResult)
+            } else {
+                roomResponseMutableLiveData.postValue(Resource.Error("Internet is not available"))
+            }
+        } catch (e: Exception) {
+            roomResponseMutableLiveData.postValue(Resource.Error(e.message.toString()))
         }
     }
 

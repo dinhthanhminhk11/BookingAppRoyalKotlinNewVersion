@@ -8,6 +8,7 @@ import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
+import com.example.bookingapproyalkotlinver3.data.model.hotel.Room
 import com.example.bookingapproyalkotlinver3.data.model.notification.NotiResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.LoginResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
@@ -61,4 +62,7 @@ interface APIService {
         @Path("id") idUser: String,
         @Path("idHotel") idHotel: String
     ): Response<BookmarkResponse>
+
+    @GET("getPhongById/{id}")
+    suspend fun getRoomById(@Path("id") id: String) : Response<Room>
 }

@@ -52,7 +52,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private var daysDiffPrivate: Int = 1
     private var checkStartDate = "";
     private var checkEndDate = "";
-    private var daysDiff = 1;
     private var countRoom = 2
     private var countPerson = 2
     private var countChildren = 2

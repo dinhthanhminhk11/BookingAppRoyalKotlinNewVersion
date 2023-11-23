@@ -156,7 +156,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/poppins_medium"
                 android:maxLines="1"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:textSize="@dimen/_20sp"
                 android:textStyle="bold" />
 
@@ -168,7 +168,7 @@
                 android:fontFamily="@font/poppins_medium"
                 android:maxLines="1"
                 android:text="@string/textPerNight"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
         </LinearLayout>
 

@@ -9,6 +9,7 @@ import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelById
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponse
 import com.example.bookingapproyalkotlinver3.data.model.hotel.HotelResponseNearBy
 import com.example.bookingapproyalkotlinver3.data.model.hotel.LocationNearByRequest
+import com.example.bookingapproyalkotlinver3.data.model.hotel.Room
 import com.example.bookingapproyalkotlinver3.data.model.notification.NotiResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.LoginResponse
 import com.example.bookingapproyalkotlinver3.data.model.user.UserLogin
@@ -53,4 +54,8 @@ class RemoteDataSourceImpl(private val apiService: APIService) : RemoteDataSourc
         idUser: String,
         idHotel: String
     ): Response<BookmarkResponse> = apiService.deleteBookmark(idUser, idHotel)
+
+    override suspend fun getRoomById(id: String): Response<Room> =
+        apiService.getRoomById(id)
+
 }

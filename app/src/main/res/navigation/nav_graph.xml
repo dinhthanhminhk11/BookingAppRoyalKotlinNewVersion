@@ -62,12 +62,19 @@
     </fragment>
     <fragment
         android:id="@+id/detailHotelFragment"
-        android:name="com.example.bookingapproyalkotlinver3.ui.fragment.DetailHotelFragment"
+        android:name="com.example.bookingapproyalkotlinver3.ui.fragment.booking.DetailHotelFragment"
         android:label="fragment_detail_hotel_activity"
         tools:layout="@layout/fragment_detail_hotel_activity">
         <action
             android:id="@+id/action_detailHotelFragment_to_detailImageHotelFragment"
             app:destination="@id/detailImageHotelFragment"
+            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:exitAnim="@anim/fragment_slide_left_exit"
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit" />
+        <action
+            android:id="@+id/action_detailHotelFragment_to_roomFragment"
+            app:destination="@id/roomFragment"
             app:enterAnim="@anim/fragment_slide_left_enter"
             app:exitAnim="@anim/fragment_slide_left_exit"
             app:popEnterAnim="@anim/fragment_slide_right_enter"
@@ -145,4 +152,9 @@
             app:popEnterAnim="@anim/fragment_slide_right_enter"
             app:popExitAnim="@anim/fragment_slide_right_exit" />
     </fragment>
+    <fragment
+        android:id="@+id/roomFragment"
+        android:name="com.example.bookingapproyalkotlinver3.ui.fragment.booking.RoomFragment"
+        android:label="fragment_room"
+        tools:layout="@layout/fragment_room" />
 </navigation>

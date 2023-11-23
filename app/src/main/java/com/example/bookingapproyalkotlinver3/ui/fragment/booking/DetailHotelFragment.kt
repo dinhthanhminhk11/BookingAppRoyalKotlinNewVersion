@@ -1,4 +1,4 @@
-package com.example.bookingapproyalkotlinver3.ui.fragment
+package com.example.bookingapproyalkotlinver3.ui.fragment.booking
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -11,7 +11,6 @@ import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -38,10 +37,10 @@ import com.example.bookingapproyalkotlinver3.databinding.ItemConvenientBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemFeedbackBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemGalleryBinding
 import com.example.bookingapproyalkotlinver3.databinding.ItemRoomHotelBinding
+import com.example.bookingapproyalkotlinver3.ui.adapter.ImageAutoSliderAdapter
 import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.IndicatorView.animation.type.IndicatorAnimationType
 import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.SliderAnimations
 import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.SliderView
-import com.example.bookingapproyalkotlinver3.ui.customview.autoimage.SliderViewAdapter
 import com.example.bookingapproyalkotlinver3.ui.fragment.home.HomeFragment.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.bookingapproyalkotlinver3.viewModel.MainViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -74,6 +73,8 @@ class DetailHotelFragment :
     private var idHotel: String = ""
     private lateinit var mMap: GoogleMap
     private var isMapReady = false
+    private var ageChildren: Int = 0
+    private var cancelBooking: Boolean = false
     override fun initView() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.mapinfo) as SupportMapFragment?
         mapFragment?.getMapAsync { googleMap ->
@@ -234,7 +235,8 @@ class DetailHotelFragment :
     private fun loadData(it: HotelById) {
         loadImage(binding.ivimgHotel.context, it.dataHotel.images[0], binding.ivimgHotel)
         loadImage(binding.imgManage.context, it.dataUser.image, binding.imgManage)
-
+        cancelBooking = it.dataHotel.chinhSachHuy
+        ageChildren = it.dataHotel.treEm
         binding.tvNameHotel.text = it.dataHotel.name
         binding.tvAddress.text =
             "${it.dataHotel.sonha}, ${it.dataHotel.xa}, ${it.dataHotel.huyen}, ${it.dataHotel.tinh}"
@@ -465,7 +467,15 @@ class DetailHotelFragment :
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.bind(roomList[position])
             holder.itemView.setOnClickListener {
-
+                val bundle = Bundle().apply {
+                    putSerializable(AppConstant.ROOM_EXTRA, roomList[position]._id)
+                    putBoolean(AppConstant.CANCEL_BOOKING, cancelBooking)
+                    putInt(AppConstant.AGE_CHILDREN, ageChildren)
+                }
+                findNavController().navigate(
+                    R.id.action_detailHotelFragment_to_roomFragment,
+                    bundle
+                )
             }
         }
 
@@ -496,28 +506,6 @@ class DetailHotelFragment :
                 binding.tvCountBathroom.text = item.bedroom[0].name
                 binding.price.text = fm.format(item.price)
             }
-        }
-    }
-
-    inner class ImageAutoSliderAdapter(private val listImage: List<String>) :
-        SliderViewAdapter<ImageAutoSliderAdapter.Holder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup): Holder {
-            val view =
-                LayoutInflater.from(parent.context).inflate(R.layout.slider_item, parent, false)
-            return Holder(view)
-        }
-
-        override fun onBindViewHolder(viewHolder: Holder, position: Int) {
-            loadImage(viewHolder.imageView.context, listImage[position], viewHolder.imageView)
-        }
-
-        override fun getCount(): Int {
-            return listImage.size
-        }
-
-        inner class Holder(itemView: View) : ViewHolder(itemView) {
-            val imageView: ImageView = itemView.findViewById(R.id.image_view)
         }
     }
 

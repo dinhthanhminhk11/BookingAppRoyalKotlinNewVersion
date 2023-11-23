@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.bookingapproyalkotlinver3.R
+import java.text.DecimalFormat
 
 object AppConstant {
     const val BASE = "https://weathered-wind-3010.fly.dev"
@@ -40,6 +41,9 @@ object AppConstant {
     const val TAG_SETTING_LOGOUT = "TAG_SETTING_LOGOUT"
 
     const val HOTEL_EXTRA = "HOTEL_EXTRA"
+    const val ROOM_EXTRA = "ROOM_EXTRA"
+    const val CANCEL_BOOKING = "CANCEL_BOOKING"
+    const val AGE_CHILDREN = "AGE_CHILDREN"
     const val TOKEN_USER = "TOKEN_USER"
     const val GALLERY_LIST = "galleryList"
     const val POSITION_GALLERY = "POSITION_GALLERY"

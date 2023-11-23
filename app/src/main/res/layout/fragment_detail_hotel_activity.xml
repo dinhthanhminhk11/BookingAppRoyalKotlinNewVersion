@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_EBEBEB"
-    tools:context=".ui.fragment.DetailHotelFragment">
+    tools:context=".ui.fragment.booking.DetailHotelFragment">
 
     <ScrollView
         android:visibility="gone"
