@@ -1,7 +1,7 @@
 <resources>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="api_key_map">AIzaSyCKDGVrxkDbRrEax4hFtpm2oi-nTjiqNos</string>
+    <string name="api_key_map">AIzaSyAx9QBgTFEaF2fhsUsLVxzDl1kmH3gt2QA</string>
     <string name="dup_back">Nhấn back lần nữa để thoát</string>
 
     <string name="write_setting_permission_error">This feature requires permission \"write settings\"</string>

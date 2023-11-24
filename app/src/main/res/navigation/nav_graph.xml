@@ -59,6 +59,13 @@
             app:exitAnim="@anim/fragment_slide_left_exit"
             app:popEnterAnim="@anim/fragment_slide_right_enter"
             app:popExitAnim="@anim/fragment_slide_right_exit" />
+        <action
+            android:id="@+id/action_kingMainFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment"
+            app:enterAnim="@anim/fragment_slide_left_enter"
+            app:exitAnim="@anim/fragment_slide_left_exit"
+            app:popEnterAnim="@anim/fragment_slide_right_enter"
+            app:popExitAnim="@anim/fragment_slide_right_exit" />
     </fragment>
     <fragment
         android:id="@+id/detailHotelFragment"
@@ -157,4 +164,9 @@
         android:name="com.example.bookingapproyalkotlinver3.ui.fragment.booking.RoomFragment"
         android:label="fragment_room"
         tools:layout="@layout/fragment_room" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.bookingapproyalkotlinver3.ui.fragment.user.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
 </navigation>

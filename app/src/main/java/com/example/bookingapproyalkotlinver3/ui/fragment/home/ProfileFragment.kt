@@ -84,6 +84,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                             AppConstant.TAG_SETTING_ABOUT_US -> navigateFragment(R.id.action_kingMainFragment_to_aboutUsFragment)
                             AppConstant.TAG_SETTING_CHANG_HELP -> navigateFragment(R.id.action_kingMainFragment_to_helpFragment)
                             AppConstant.TAG_SETTING_NOTIFICATION -> navigateFragment(R.id.action_kingMainFragment_to_notificationFragment)
+                            AppConstant.TAG_SETTING_SHOW_INFO -> navigateFragment(R.id.action_kingMainFragment_to_editProfileFragment)
                             else -> {}
                         }
                     }
